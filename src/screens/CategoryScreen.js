@@ -6,7 +6,7 @@ import CategoryCard from '../components/CategoryCard'
 const FLATLIST_COLUMN_NUM = 1
 const dimensions = Dimensions.get('window')
 
-export default class MainScreen extends Component {
+export default class CategoryScreen extends Component {
     constructor() {
         super()
         this.state = {
