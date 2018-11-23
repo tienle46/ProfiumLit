@@ -19,14 +19,15 @@ export default class CategoryCard extends Component {
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.5,
                 shadowRadius: 1,
-                borderRadius: 4
+                borderRadius: 4,
+
             },
             image: {
-                width: '100%'
+                width: '100%',
             },
             text: {
                 height: 36,
-                backgroundColor: '#60cbdb',
+                backgroundColor: '#aebc22',
                 color: 'white',
                 paddingVertical: 8,
                 textAlign: 'center',
@@ -34,7 +35,6 @@ export default class CategoryCard extends Component {
                 fontWeight: '500'
             }
         })
-        console.log('keke', this.props.cardImage)
         return(
             <View style={styles.wrapper}>
                 <View style = {styles.container}>
@@ -42,7 +42,7 @@ export default class CategoryCard extends Component {
                         source = {{uri : this.props.cardImage}}
                         style={styles.image}
                     />
-                    <Text style={styles.text}>{this.props.categoryName}</Text>
+                    {this.props.showDescription ? <Text style={styles.text}>{this.props.categoryName}</Text> : null}
                 </View>
             </View>
         )

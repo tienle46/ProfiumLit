@@ -2,66 +2,58 @@ import React, {Component} from 'react'
 import {View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity} from 'react-native'
 import API from '../cores/API'
 import CategoryCard from '../components/CategoryCard'
+import Router from '../routes/Router'
+import RouteNames from '../routes/RouteNames'
+import Header from '../components/Header'
 
 const FLATLIST_COLUMN_NUM = 1
 const dimensions = Dimensions.get('window')
 
 export default class CategoryScreen extends Component {
+    static navigationOptions = {
+        headerTitle:(
+        <Header />
+        ),
+        headerTintColor: 'black',
+    }
+
     constructor() {
         super()
         this.state = {
-            dataList: [],
-            isLoading: true
+            dataList : [],
+            isLoading : true
         }
     }
 
-    _createData = (propName, imageUrls, thumbnail) => {
-        return({key: propName, imageUrls: imageUrls, thumbnail: thumbnail})
-    }
-
-    _getAllImageByProp = async (prop) => {
-        const res = await API.getImageUrls(prop)
-        const listUrl = Array.from(res)
-        return listUrl
-    }
-
-    _getRandomThumbnail = (listUrl) => {
-        const randomNumber = Math.floor(Math.random() * listUrl.length)
-        return listUrl[randomNumber]
-    }
-
-    _getAllProps = async () => {
-        const getProps = await API.getTopLevelImageProps()
-        const listPropName = Array.from(getProps)
-        return listPropName
-    }
-
-    _createDataList = async () => {
-        const allProps = await this._getAllProps()
+    _createDataList(imageUrls) {
         let dataList = []
-        for (var i = 0; i< allProps.length; i++) {
-            const allUrls = await this._getAllImageByProp(allProps[i])
-            const thumbnail = API.getNormalImage(this._getRandomThumbnail(allUrls))
-            const data = this._createData(allProps[i], allUrls, thumbnail)
+        for (let i = 0; i<imageUrls.length; i++) {
+            let data = {key: `${i+1}`, url: API.getNormalImage(imageUrls[i])}
             dataList.push(data)
         }
         return dataList
+    } 
+
+    componentDidMount() {
+        const imageUrls = Router.getParam(this,'imageUrls')
+        const dataList = this._createDataList(imageUrls)
+
+        this.setState({
+            dataList : dataList.slice(0,6),
+            isLoading : false
+        })
     }
 
-    async componentDidMount() {
-        const dataList = await this._createDataList()
-        this.setState({
-            dataList: dataList,
-            isLoading: false
-        })
+    onItemClicked = (key) => {
+        
     }
 
     renderItem = ({item}) => {
         return(
             <TouchableOpacity style = {styles.item}>
                 <CategoryCard
-                    categoryName = {item.key}
-                    cardImage = {item.thumbnail}
+                    cardImage = {item.url}
+                    showDescription = {false}
                 />
             </TouchableOpacity>
             

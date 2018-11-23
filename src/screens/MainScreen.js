@@ -2,11 +2,20 @@ import React, {Component} from 'react'
 import {View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity} from 'react-native'
 import API from '../cores/API'
 import CategoryCard from '../components/CategoryCard'
+import Router from '../routes/Router'
+import RouteNames from '../routes/RouteNames'
+import Header from '../components/Header'
 
 const FLATLIST_COLUMN_NUM = 1
 const dimensions = Dimensions.get('window')
 
 export default class MainScreen extends Component {
+    static navigationOptions = {
+        headerTitle:(
+        <Header />
+        ),
+    }
+
     constructor() {
         super()
         this.state = {
@@ -56,12 +65,23 @@ export default class MainScreen extends Component {
         })
     }
 
+    onItemClicked = (key) => {
+        let imageList = []
+        for (let i = 0; i < this.state.dataList.length; i ++) {
+            if (this.state.dataList[i].key === key) {
+                imageList = this.state.dataList[i].imageUrls
+            }
+        }
+        Router.navigate(RouteNames.Category, {imageUrls: imageList})
+    }
+
     renderItem = ({item}) => {
         return(
-            <TouchableOpacity style = {styles.item}>
+            <TouchableOpacity style = {styles.item} onPress = {() => this.onItemClicked(item.key)}>
                 <CategoryCard
                     categoryName = {item.key}
                     cardImage = {item.thumbnail}
+                    showDescription = {true}
                 />
             </TouchableOpacity>
             

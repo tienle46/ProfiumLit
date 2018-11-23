@@ -7,6 +7,7 @@ import {
 import {SwitchNavigator} from "react-navigation"
 
 import RouteNames from './RouteNames'
+import MainStack from './MainStack'
 import MainScreen from '../screens/MainScreen'
 
 
@@ -16,10 +17,10 @@ const styles = StyleSheet.create({
 
 const AppRoute = SwitchNavigator(
     {
-        [RouteNames.Main] : MainScreen
+        [RouteNames.MainStack] : MainStack
     },
     {
-        initialRouteName: RouteNames.Main
+        initialRouteName: RouteNames.MainStack
     }
 )
 
