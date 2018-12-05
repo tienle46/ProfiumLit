@@ -19,12 +19,7 @@ export default class Header extends Component{
 }
 const styles = StyleSheet.create({
     logo: {
-        width: 53,
-        position: 'absolute',
-            transform: [
-                { translateX: -53/2 },
-            ],
-            top: '-820%',
-            left: '50%',
+        width: 60,
+        height: 45,
     }
 })
