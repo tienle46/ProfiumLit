@@ -7,7 +7,7 @@ const REMOTE_END_POINT = 'https://m1.profium.com/servlet/QueryServlet?'
 const IMAGE = '<http://www.profium.com/archive/Image>'
 const DEPICTED_OBJ = '<http://www.profium.com/archive/depictedObject>'
 const DEPICTED_OBJ_INV = '<http://www.profium.com/archive/depictedObjectInverse>'
-const THUMBNAIL_URL = '<http://www.profium.com/imagearchive/2007/thumbnail>' // what's in /contract-archive ??
+const THUMBNAIL_URL = '<http://www.profium.com/imagearchive/2007/thumbnail>'
 const LARGE_THUMBNAIL_URL = '<http://www.profium.com/imagearchive/2007/largeThumbnail>'
 const NORMAL_IMAGE_URL = '<http://www.profium.com/imagearchive/2007/normal>'
 const DISPLAY_URL_START = 'https://m1.profium.com/displayContent.do?uri='
