@@ -1,5 +1,6 @@
 export default {
     Main: 'MainScreen',
     Category: 'CategoryScreen',
-    MainStack: 'MainStack'
+    MainStack: 'MainStack',
+    Detail: 'ImageDetailScreen'
 }

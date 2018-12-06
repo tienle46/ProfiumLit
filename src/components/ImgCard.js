@@ -1,19 +1,22 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, Dimensions, Image} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity} from 'react-native'
 const dimensions = {width: Dimensions.get('window').width, height: Dimensions.get('window').height}
 
 export default class ImgCard extends Component {
     render() {
         return (
-            <View style = {styles.container}>
-                <View style = {{flexDirection:'row',padding:10}}>
+            <TouchableOpacity style = {styles.container} onPress = {this.props.onPress}>
                     <Image source = {{uri : this.props.cardImage}} style = {styles.imgView}/>
 
                     <View style = {styles.cardView}>
-                        
+                        <View style={styles.imgTitle}> 
+                            <Text style = {styles.title}>{this.props.title}</Text>
+                        </View>
+                        <View style={styles.imgDescription}>
+                            <Text>{this.props.description}</Text>
+                        </View>
                     </View>
-                </View> 
-            </View>
+            </TouchableOpacity>
         )
     }
 }
@@ -23,6 +26,7 @@ const styles = StyleSheet.create({
         height: dimensions.height*0.25,
         flex: 1,
         flexDirection: 'row',
+        paddingVertical: 10
     },
     imgView: {
         width: '40%',
@@ -31,6 +35,20 @@ const styles = StyleSheet.create({
     cardView: {
         width: '60%',
         height: '100%',
-        backgroundColor: 'tomato'
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#DCDCDC',
+    },
+    imgTitle: {
+        width: "85%",
+        height: '30%',
+    },
+    imgDescription: {
+        width: "85%",
+        height: '70%',
+    },
+    title: {
+
     }
 })
