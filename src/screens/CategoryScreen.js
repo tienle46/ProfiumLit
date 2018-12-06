@@ -57,7 +57,9 @@ export default class CategoryScreen extends Component {
             //         showDescription = {false}
             //     />
             // </TouchableOpacity>
-            <ImgCard />
+            <ImgCard
+                cardImage = {item.url}
+            />
         )
     }
 
@@ -91,10 +93,10 @@ const styles = StyleSheet.create({
     },
     list: {
         width: '100%',
-        paddingHorizontal: 48
+        paddingHorizontal: 20
     },
     item: {
-        marginVertical: dimensions.height * 0.02
+        marginBottom: dimensions.height * 0.02
     }
 })
 

@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     },
     list: {
         width: '100%',
-        paddingHorizontal: 48
+        paddingHorizontal: 20
     },
     item: {
         marginVertical: dimensions.height * 0.02
