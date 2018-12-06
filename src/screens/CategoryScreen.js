@@ -5,6 +5,7 @@ import CategoryCard from '../components/CategoryCard'
 import Router from '../routes/Router'
 import RouteNames from '../routes/RouteNames'
 import Header from '../components/Header'
+import ImgCard from '../components/ImgCard'
 
 const FLATLIST_COLUMN_NUM = 1
 const dimensions = Dimensions.get('window')
@@ -50,13 +51,13 @@ export default class CategoryScreen extends Component {
 
     renderItem = ({item}) => {
         return(
-            <TouchableOpacity style = {styles.item}>
-                <CategoryCard
-                    cardImage = {item.url}
-                    showDescription = {false}
-                />
-            </TouchableOpacity>
-            
+            // <TouchableOpacity style = {styles.item}>
+            //     <CategoryCard
+            //         cardImage = {item.url}
+            //         showDescription = {false}
+            //     />
+            // </TouchableOpacity>
+            <ImgCard />
         )
     }
 
