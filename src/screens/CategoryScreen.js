@@ -43,8 +43,6 @@ export default class CategoryScreen extends Component {
     _onPressAdd = () => {
         this.setState({
             showSearchModal: true
-        },() => {
-            console.warn(this.state.showSearchModal && Platform.OS === 'ios', this.state.showSearchModal && Platform.OS === 'android')
         })
 
     }
@@ -98,6 +96,30 @@ export default class CategoryScreen extends Component {
         )
     }
 
+    renderSearchModal = () => {
+        if(this.state.showSearchModal && Platform.OS === 'ios') {
+            return <BlurView 
+            blurType = 'light'
+            blurAmount = {5}
+            style = {style = styles.blur}>
+                <View style = {styles.searchWrapper}>
+                    <SearchModal 
+                        closeOnPress = {this._closeSearchModal}
+                    />
+                </View>
+            </BlurView>
+        }
+        else if (this.state.showSearchModal && Platform.OS === 'android') {
+            return <View style = {styles.searchWrapper}>
+            <SearchModal 
+                closeOnPress = {this._closeSearchModal}
+            />
+        </View> 
+        } else {
+            return null
+        }
+    }
+
     render() {
         if(this.state.isLoading) {
             return (
@@ -116,25 +138,7 @@ export default class CategoryScreen extends Component {
                     extraData = {this.state.isLoading}
                     showsVerticalScrollIndicator={false}
                 />
-                {this.state.showSearchModal && Platform.OS === 'ios' ? this.state.showSearchModal && Platform.OS === 'android' ?
-                <BlurView 
-                blurType = 'light'
-                blurAmount = {5}
-                style = {style = styles.blur}>
-                    <View style = {styles.searchWrapper}>
-                        <SearchModal 
-                            closeOnPress = {this._closeSearchModal}
-                        />
-                    </View>
-                </BlurView>
-                : 
-                <View style = {styles.searchWrapper}>
-                    <SearchModal 
-                        closeOnPress = {this._closeSearchModal}
-                    />
-                </View> 
-                : null
-                }
+                {this.renderSearchModal()}
             </View>
         )
     }
