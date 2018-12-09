@@ -46,7 +46,7 @@ export default class CategoryScreen extends Component {
     }
 
     onItemClicked = (key) => {
-        
+        Router.navigate(RouteNames.Detail, {imageUrl: this.state.dataList[key-1]})
     }
 
     renderItem = ({item}) => {
@@ -60,7 +60,8 @@ export default class CategoryScreen extends Component {
             <ImgCard
                 cardImage = {item.url}
                 title = 'Title'
-                description = 'description'
+                description = 'Description'
+                onPress = {() => this.onItemClicked(item.key)}
             />
         )
     }

@@ -49,7 +49,7 @@ export default class CategoryCard extends Component {
     }
 }
 
-class ResponsiveImage extends Component {
+export class ResponsiveImage extends Component {
     constructor(props) {
         super(props)
         this.state = {
