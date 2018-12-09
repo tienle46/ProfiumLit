@@ -4,7 +4,7 @@ import {
     Platform
 } from 'react-native';
 
-import {SwitchNavigator} from "react-navigation"
+import {createSwitchNavigator} from "react-navigation"
 
 import RouteNames from './RouteNames'
 import MainStack from './MainStack'
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     
 })
 
-const AppRoute = SwitchNavigator(
+const AppRoute = createSwitchNavigator(
     {
         [RouteNames.MainStack] : MainStack
     },

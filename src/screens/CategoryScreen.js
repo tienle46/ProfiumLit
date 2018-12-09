@@ -6,14 +6,17 @@ import Router from '../routes/Router'
 import RouteNames from '../routes/RouteNames'
 import Header from '../components/Header'
 import ImgCard from '../components/ImgCard'
+import SearchModal from '../components/SearchModal'
 
-const FLATLIST_COLUMN_NUM = 1
+const FLATLIST_COLUMN_NUM = 3
 const dimensions = Dimensions.get('window')
 
 export default class CategoryScreen extends Component {
     static navigationOptions = {
         headerTitle:(
-        <Header />
+        <Header 
+            onPress = {this._onPressAdd}
+        />
         ),
         headerTintColor: 'black',
     }
@@ -22,8 +25,22 @@ export default class CategoryScreen extends Component {
         super()
         this.state = {
             dataList : [],
-            isLoading : true
+            isLoading : true,
+            showSearchModal: false
         }
+    }
+
+    _onPressAdd = () => {
+        this.setState({
+            showSearchModal: true
+        })
+        console.warn('asdas')
+    }
+
+    _closeSearchModal = () => {
+        this.setState({
+            showSearchModal: false
+        })
     }
 
     _createDataList(imageUrls) {
@@ -40,7 +57,7 @@ export default class CategoryScreen extends Component {
         const dataList = this._createDataList(imageUrls)
 
         this.setState({
-            dataList : dataList.slice(0,6),
+            dataList : dataList.slice(0,15),
             isLoading : false
         })
     }
@@ -58,10 +75,12 @@ export default class CategoryScreen extends Component {
             //     />
             // </TouchableOpacity>
             <ImgCard
+            
                 cardImage = {item.url}
                 title = 'Title'
                 description = 'Description'
                 onPress = {() => this.onItemClicked(item.key)}
+                itemWidth = {(dimensions.width-30)/3}
             />
         )
     }
@@ -79,25 +98,26 @@ export default class CategoryScreen extends Component {
                 <FlatList
                     style = {styles.list}
                     data = {this.state.dataList}
-                    renderItem = {this.renderItem}
                     numColumns = {FLATLIST_COLUMN_NUM}
+                    renderItem = {this.renderItem}
                     extraData = {this.state.isLoading}
                     showsVerticalScrollIndicator={false}
                 />
+
+                <SearchModal/>
+                }
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'column',
+        paddingTop: 5,
         flex:1,
-        paddingTop: dimensions.height * 0.02,
-        alignItems: 'center'
+        flexDirection: 'row',
     },
     list: {
         width: '100%',
-        paddingHorizontal: dimensions.height * 0.01,
     },
     item: {
         marginBottom: dimensions.height * 0.02

@@ -24,10 +24,10 @@ export default class ImageDetailScreen extends Component {
                 <ResponsiveImage style = {styles.imgDetail} source = {{uri : Router.getParam(this,'imageUrl').url}}/>
 
                 <View style = {styles.propertyDetail}>
-                    <Text style = {styles.prop}><B>Title</B>: Image</Text>
-                    <Text style = {styles.prop}><B>Description</B>: Description of the image </Text>
-                    <Text style = {styles.prop}><B>Author</B>: Anonymous</Text>
-                    <Text style = {styles.prop}><B>Year</B>: 0000</Text>
+                    <Text style = {styles.title}><B>title</B> by <B>author</B></Text>
+                    <Text style = {styles.time}><B>time</B>: 00/00/0000</Text>
+                    <Text style = {styles.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>
+                    
                 </View>
             </ScrollView>
         )
@@ -40,16 +40,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     imgDetail: {
-        width: '90%',
-        marginVertical: 20
+        width: '100%',
+        marginBottom: 10
     },
     propertyDetail: {
-        width: '90%',
-        marginBottom: 20
+        width: '80%',
+        marginBottom: 10
     },
-    prop: {
-        textAlign: 'justify',
-        lineHeight: 30,
+    title: {
+        fontSize: 18,
+        marginBottom: 5,
+    },
+    time: {
+        fontSize: 16,
+        marginBottom: 10
     }
 })
 
