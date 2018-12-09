@@ -10,9 +10,6 @@ export default class Header extends Component{
         return(
             <View style = {styles.container}>
                 <Image source = {logo} style = {styles.logo} resizeMode = 'contain' />
-                <TouchableOpacity onPress = {this.props.onPress}>
-                    <Image source = {searchIcon} style = {styles.search} resizeMode = 'contain'/>
-                </TouchableOpacity>
             </View>
         )
     }
@@ -29,8 +26,4 @@ const styles = StyleSheet.create({
         width: 45,
         height: 45
     },
-    search: {
-        width: 30,
-        height: 30
-    }
 })

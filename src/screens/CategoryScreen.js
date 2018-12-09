@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity} from 'react-native'
+import {View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, Image} from 'react-native'
 import API from '../cores/API'
 import CategoryCard from '../components/CategoryCard'
 import Router from '../routes/Router'
@@ -7,18 +7,28 @@ import RouteNames from '../routes/RouteNames'
 import Header from '../components/Header'
 import ImgCard from '../components/ImgCard'
 import SearchModal from '../components/SearchModal'
+const searchIcon = require('../assets/images/search.png')
+import { BlurView, VibrancyView } from 'react-native-blur';
 
 const FLATLIST_COLUMN_NUM = 3
 const dimensions = Dimensions.get('window')
 
 export default class CategoryScreen extends Component {
-    static navigationOptions = {
-        headerTitle:(
-        <Header 
-            onPress = {this._onPressAdd}
-        />
-        ),
-        headerTintColor: 'black',
+    static navigationOptions = ({navigation}) => {
+        return {
+            headerTitle:(
+            <Header />
+            ),
+            headerTintColor: 'black',
+            headerRight: (
+            <TouchableOpacity
+                onPress={navigation.state.params.openSearch}
+                style = {{marginRight: 20}}
+            >
+                <Image source = {searchIcon} style = {styles.search} resizeMode = 'contain'/>
+            </TouchableOpacity>
+    ),
+        }
     }
 
     constructor() {
@@ -34,7 +44,6 @@ export default class CategoryScreen extends Component {
         this.setState({
             showSearchModal: true
         })
-        console.warn('asdas')
     }
 
     _closeSearchModal = () => {
@@ -53,6 +62,7 @@ export default class CategoryScreen extends Component {
     } 
 
     componentDidMount() {
+        this.props.navigation.setParams({ openSearch: this._onPressAdd });
         const imageUrls = Router.getParam(this,'imageUrls')
         const dataList = this._createDataList(imageUrls)
 
@@ -103,9 +113,18 @@ export default class CategoryScreen extends Component {
                     extraData = {this.state.isLoading}
                     showsVerticalScrollIndicator={false}
                 />
-
-                <SearchModal/>
-                }
+                {this.state.showSearchModal ?
+                <BlurView 
+                blurType = 'light'
+                blurAmount = {5}
+                style = {style = styles.blur}>
+                    <View style = {styles.searchWrapper}>
+                        <SearchModal 
+                            closeOnPress = {this._closeSearchModal}
+                        />
+                    </View>
+                </BlurView>
+                :null}
             </View>
         )
     }
@@ -121,6 +140,23 @@ const styles = StyleSheet.create({
     },
     item: {
         marginBottom: dimensions.height * 0.02
+    },
+    search: {
+        width: 30,
+        height: 30
+    },
+    blur: {
+        position: 'absolute',
+        top: '0%',
+        left: '0%',
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    searchWrapper: {
+        position: 'absolute',
+        top: '10%',
     }
 })
 
