@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, Image} from 'react-native'
+import {View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, Image,Platform} from 'react-native'
 import API from '../cores/API'
 import CategoryCard from '../components/CategoryCard'
 import Router from '../routes/Router'
@@ -43,7 +43,10 @@ export default class CategoryScreen extends Component {
     _onPressAdd = () => {
         this.setState({
             showSearchModal: true
+        },() => {
+            console.warn(this.state.showSearchModal && Platform.OS === 'ios', this.state.showSearchModal && Platform.OS === 'android')
         })
+
     }
 
     _closeSearchModal = () => {
@@ -113,7 +116,7 @@ export default class CategoryScreen extends Component {
                     extraData = {this.state.isLoading}
                     showsVerticalScrollIndicator={false}
                 />
-                {this.state.showSearchModal ?
+                {this.state.showSearchModal && Platform.OS === 'ios' ? this.state.showSearchModal && Platform.OS === 'android' ?
                 <BlurView 
                 blurType = 'light'
                 blurAmount = {5}
@@ -124,7 +127,14 @@ export default class CategoryScreen extends Component {
                         />
                     </View>
                 </BlurView>
-                :null}
+                : 
+                <View style = {styles.searchWrapper}>
+                    <SearchModal 
+                        closeOnPress = {this._closeSearchModal}
+                    />
+                </View> 
+                : null
+                }
             </View>
         )
     }
@@ -157,6 +167,7 @@ const styles = StyleSheet.create({
     searchWrapper: {
         position: 'absolute',
         top: '10%',
+        backgroundColor: 'black'
     }
 })
 

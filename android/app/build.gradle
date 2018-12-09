@@ -99,6 +99,8 @@ android {
 
     defaultConfig {
         applicationId "com.profiumlit"
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -115,6 +117,7 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
+    
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
@@ -149,3 +152,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
