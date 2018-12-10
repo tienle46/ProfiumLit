@@ -24,14 +24,20 @@ export default class MainScreen extends Component {
         }
     }
 
-    _createData = (propName, imageUrls, thumbnail) => {
-        return({key: propName, imageUrls: imageUrls, thumbnail: thumbnail})
+    _createData = (label, date, count, urls, thumbnail) => {
+        return({key: label, date: date, count, urls:urls, thumbnail})
     }
 
-    _getAllImageByProp = async (prop) => {
-        const res = await API.getImageUrls(prop)
-        const listUrl = Array.from(res)
-        return listUrl
+
+
+    _getAllImageByLabel = async (predicate) => {
+        const data = await API.getInversePredicatedObjects(predicate)
+        return data //data.objectInverse
+    }
+
+    _getImageDate = async (predicate) => {
+        const data = await API.getPredicatedObjects(predicate)
+        return data //data.date
     }
 
     _getRandomThumbnail = (listUrl) => {
@@ -40,40 +46,44 @@ export default class MainScreen extends Component {
     }
 
     _getAllProps = async () => {
-        const getProps = await API.getTopLevelImageProps()
-        const listPropName = Array.from(getProps)
-        return listPropName
+        const data = await API.fetchAll()
+        return data //{data.predicate,data.lable,data.count}
     }
 
     _createDataList = async () => {
         const allProps = await this._getAllProps()
         let dataList = []
-        for (var i = 0; i< allProps.length; i++) {
-            const allUrls = await this._getAllImageByProp(allProps[i])
+        for (let i = 0; i< allProps.length; i++) {
+            const objectInverses = await this._getAllImageByLabel(allProps[i].predicate)
+            let allUrls = []
+            for(let i = 0; i< objectInverses.length; i++) {
+                allUrls.push(objectInverses[i].objectInverse)
+            }
+            const date = await this._getImageDate(allProps[i].predicate)
             const thumbnail = API.getNormalImage(this._getRandomThumbnail(allUrls))
-            const data = this._createData(allProps[i], allUrls, thumbnail)
+            const data = this._createData(allProps[i].label, date[0].date, allProps[i].count, allUrls, thumbnail)
             dataList.push(data)
         }
         return dataList
     }
 
     async componentDidMount() {
-        // const dataList = await this._createDataList()
-        // this.setState({
-        //     dataList: dataList,
-        //     isLoading: false
-        // })
-        console.log(await API.getInversePredicatedObjects('http://www.profium.com/tuomi/alkamisajankohta'))
+        const dataList = await this._createDataList()
+        this.setState({
+            dataList: dataList,
+            isLoading: false
+        })
     }
 
     onItemClicked = (key) => {
-        let imageList = []
+        let data = {}
         for (let i = 0; i < this.state.dataList.length; i ++) {
             if (this.state.dataList[i].key === key) {
-                imageList = this.state.dataList[i].imageUrls
+                data = this.state.dataList[i]
             }
         }
-        Router.navigate(RouteNames.Category, {imageUrls: imageList})
+        console.warn(data)
+        Router.navigate(RouteNames.Category, {data: data})
     }
 
     renderItem = ({item}) => {

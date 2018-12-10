@@ -15,7 +15,7 @@ const parser = new DomParser()
 
 export default API = {
 
-  query: function(config){
+  query: async function(config) {
 
     const request = REMOTE_END_POINT
     const options = {
@@ -25,23 +25,20 @@ export default API = {
       },
       body: `${QUERY_START}${config.query}`
     }
-    return fetch(request, options)
-      .then(response => response.text())
-      .then(responseText => { 
-      const json = this.xml2json(responseText, "  ")
-      return(json)
-      })
+    const res = await fetch(request, options)
+    const resText = await res.text()
+    const json = this.xml2json(resText, " ")
+    return json 
   },
 
 
-  fetchAll : function() {
+  fetchAll : async function()  {
     const config = {
       query: FETCH_ALL
     }
-    this.query(config).then(response =>{
-      output = this.handleFetchAllData(response)
-      return output
-    })
+    const res = await this.query(config)
+    const output = this.handleFetchAllData(res)
+    return output
   },
 
   handleFetchAllData: function(json) {
@@ -60,16 +57,14 @@ export default API = {
     return JSON.parse(JSON.stringify(parsedResponse))
 },
 
-  getPredicatedObjects: function(predicate){
+  getPredicatedObjects: async function(predicate){
     const GET_PREDICATED_OBJ = 'SELECT ?o (COUNT(?s) AS ?COUNT) WHERE { ?s <' + predicate + '> ?o FILTER regex(STR(?s), "http://www.profium.com/archive/")} GROUP BY ?o'
     const config = {
       query: GET_PREDICATED_OBJ
     }
-    this.query(config).then(response =>{
-      const data = response
-      const output = this.handlePredicatedObjectData(data)
-      console.warn(output)
-    })
+    const res = await this.query(config)
+    const output = this.handlePredicatedObjectData(res)
+    return(output)
   },
 
   handlePredicatedObjectData: function(json) {
@@ -79,14 +74,14 @@ export default API = {
     if (resultArray instanceof Array) {
         resultArray.forEach(element => {
             let tmp = {
-                label: element.binding[0].literal? element.binding[0].literal['#text'] : element.binding[0].uri.split('#')[1],
+                date: element.binding[0].literal? element.binding[0].literal['#text'] : element.binding[0].uri.split('#')[1],
                 count: element.binding[1].literal['#text']
             }
             parsedResponse.push(tmp)
         })
     } else {
         let tmp = {
-            label: resultArray.binding[0].literal? resultArray.binding[0].literal['#text'] : resultArray.binding[0].uri.split('#')[1],
+            date: resultArray.binding[0].literal? resultArray.binding[0].literal['#text'] : resultArray.binding[0].uri.split('#')[1],
             count: resultArray.binding[1].literal['#text']
         }
         parsedResponse.push(tmp)
@@ -94,16 +89,14 @@ export default API = {
     return JSON.parse(JSON.stringify(parsedResponse))
   },
 
-  getInversePredicatedObjects: function(predicate) {
+  getInversePredicatedObjects: async function(predicate) {
     const GET_INVERESE_PREDICATED_OBJ = 'SELECT DISTINCT ?objectInverse WHERE { ?s <' + predicate + '> ?o . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse FILTER REGEX(STR(?s), "http://www.profium.com/archive/") }'
     const config = {
       query: GET_INVERESE_PREDICATED_OBJ
     }
-    this.query(config).then(response =>{
-      const data = response
-      const output = this.handleInversePredicatedObjectData(data)
-      console.warn(output)
-    })
+    const res = await this.query(config)
+    const output = this.handleInversePredicatedObjectData(res)
+    return output
   },
 
   handleInversePredicatedObjectData(data) {
@@ -267,7 +260,7 @@ export default API = {
         xml = xml.documentElement
     var json = X.toJson(X.toObj(X.removeWhite(xml)), xml.nodeName, "\t")
     return "{\n" + tab + (tab ? json.replace(/\t/g, tab) : json.replace(/\t|\n/g, "")) + "\n}"
-},
+  },
 
   getLargeThumbnailImage: function(imageUrl) {
   
