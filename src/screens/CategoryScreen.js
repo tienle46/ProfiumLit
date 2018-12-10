@@ -110,10 +110,12 @@ export default class CategoryScreen extends Component {
             </BlurView>
         }
         else if (this.state.showSearchModal && Platform.OS === 'android') {
-            return <View style = {styles.searchWrapper}>
-            <SearchModal 
-                closeOnPress = {this._closeSearchModal}
-            />
+            return <View style = {styles.searchWrapperAndroid}>
+            <View style = {{marginTop: '-30%'}}>
+                <SearchModal 
+                    closeOnPress = {this._closeSearchModal}
+                />
+            </View>
         </View> 
         } else {
             return null
@@ -172,6 +174,16 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: '10%',
         backgroundColor: 'black'
+    },
+    searchWrapperAndroid: {
+        position: 'absolute',
+        top: '0%',
+        left: '0%',
+        backgroundColor: 'transparent',
+        width: dimensions.width,
+        height: dimensions.height,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
 

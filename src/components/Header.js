@@ -17,9 +17,9 @@ export default class Header extends Component{
 const styles = StyleSheet.create({
     container: {
         height: '100%',
-        // position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         alignItems: 'center'
     },
     logo: {
