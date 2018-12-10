@@ -27,7 +27,7 @@ export default class CategoryScreen extends Component {
             >
                 <Image source = {searchIcon} style = {styles.search} resizeMode = 'contain'/>
             </TouchableOpacity>
-    ),
+            ),
         }
     }
 
