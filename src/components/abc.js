@@ -1,51 +1,58 @@
-const QUERY_START = 'query='
-const REMOTE_END_POINT = 'https://m1.profium.com/servlet/QueryServlet?'
-const IMAGE = '<http://www.profium.com/archive/Image>'
-const DEPICTED_OBJ = '<http://www.profium.com/archive/depictedObject>'
-const DEPICTED_OBJ_INV = '<http://www.profium.com/archive/depictedObjectInverse>'
-const DISPLAY_URL_START = 'https://m1.profium.com/displayContent.do?uri='
-const FETCH_ALL = `SELECT ?p ?label (COUNT(?s) AS ?COUNT) WHERE { {?s ?p ?o FILTER REGEX(STR(?p), "http://www.profium.com/city/") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} UNION { ?s ?p ?o FILTER REGEX(STR(?p),  "http://www.profium.com/tuomi") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} UNION { ?s ?p ?o FILTER REGEX(STR(?p), "http://www.profium.com/tuomitos") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} }  GROUP BY ?p ?label`
-const IMG_TYPE_THUMB = '&type=thumb'
-const IMG_TYPE_LARGE_THUMB = '&type=largeThumb'
-const IMG_TYPE_NORMAL = '&type=normal'
-
-const IMAGE_DEPIC_COND = `?img a ${IMAGE} . ?img ${DEPICTED_OBJ} ?depic`
-var DomParser = require('react-native-html-parser').DOMParser
-const parser = new DomParser()
-
-export default API = {
-
-  query: function(config){
-
-    const request = REMOTE_END_POINT
-    const options = {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: `${QUERY_START}${config.query}`
-    }
-    return fetch(request, options)
-      .then(response => response.text())
-      .then(responseText => { 
-      const json = this.xml2json(responseText, "  ")
-      return(json)
-      })
-  },
+const backendURL = 'https://m1.profium.com/servlet/QueryServlet'
+const imageBackendURL = 'https://m1.profium.com/displayContent.do'
+const query = encodeURI('?query=SELECT ?p ?label (COUNT(?s) AS ?COUNT) WHERE { {?s ?p ?o FILTER REGEX(STR(?p), "http://www.profium.com/city/") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} UNION { ?s ?p ?o FILTER REGEX(STR(?p),  "http://www.profium.com/tuomi") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} UNION { ?s ?p ?o FILTER REGEX(STR(?p), "http://www.profium.com/tuomitos") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} }  GROUP BY ?p ?label')
+const parser = new DOMParser()
 
 
-  fetchAll : function() {
-    const config = {
-      query: FETCH_ALL
-    }
-    this.query(config).then(response =>{
-      output = this.handleFetchAllData(response)
-      return output
+function fetchAll() {
+    return new Promise(function (resolve, reject) {
+        let jsonResponse = ""
+        let xhr = createCORSRequest('GET', backendURL + query)
+
+        xhr.onload = () => {
+            // Process our return data
+            //console.log(parseResponse(xhr.responseText));
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // This will run when the request is successful
+                jsonResponse = parseResponse(xhr.responseText)
+                resolve(jsonResponse)
+            } else {
+                // This will run when it's not
+                console.log('The request failed!')
+                //something should happen here
+            }
+        }
+        xhr.send()
     })
-  },
+}
 
-  handleFetchAllData: function(json) {
-    let rawJSON = JSON.parse(json)
+/*
+xhr.onreadystatechange = function(){
+  console.log(xhr.readyState)
+  console.log(xhr.responseText)
+}
+*/
+
+//helper functions
+function createCORSRequest(method, url) {
+    let xhr = new XMLHttpRequest()
+    if ("withCredentials" in xhr) {
+        // XHR for Chrome/Firefox/Opera/Safari.
+        xhr.open(method, url, true)
+    } else if (typeof XDomainRequest != "undefined") {
+        // XDomainRequest for IE.
+        xhr = new XDomainRequest()
+        xhr.open(method, url)
+    } else {
+        // CORS not supported.
+        xhr = null
+    }
+    return xhr
+}
+
+function parseResponse(responseText) {
+    let rawJSONstring = xml2json(responseText, " ")
+    let rawJSON = JSON.parse(rawJSONstring)
     let resultArray = []
     resultArray = rawJSON.sparql.results.result
     let parsedResponse = []
@@ -58,68 +65,9 @@ export default API = {
         parsedResponse.push(tmp)
     })
     return JSON.parse(JSON.stringify(parsedResponse))
-},
+}
 
-  getPredicatedObjects: function(predicate){
-    const GET_PREDICATED_OBJ = 'SELECT ?o (COUNT(?s) AS ?COUNT) WHERE { ?s <' + predicate + '> ?o FILTER regex(STR(?s), "http://www.profium.com/archive/")} GROUP BY ?o'
-    const config = {
-      query: GET_PREDICATED_OBJ
-    }
-    this.query(config).then(response =>{
-      const data = response
-      const output = this.handlePredicatedObjectData(data)
-      console.warn(output)
-    })
-  },
-
-  handlePredicatedObjectData: function(json) {
-    let rawJSON = JSON.parse(json)
-    let resultArray = rawJSON.sparql.results.result
-    let parsedResponse = []
-    if (resultArray instanceof Array) {
-        resultArray.forEach(element => {
-            let tmp = {
-                label: element.binding[0].literal? element.binding[0].literal['#text'] : element.binding[0].uri.split('#')[1],
-                count: element.binding[1].literal['#text']
-            }
-            parsedResponse.push(tmp)
-        })
-    } else {
-        let tmp = {
-            label: resultArray.binding[0].literal? resultArray.binding[0].literal['#text'] : resultArray.binding[0].uri.split('#')[1],
-            count: resultArray.binding[1].literal['#text']
-        }
-        parsedResponse.push(tmp)
-    }
-    return JSON.parse(JSON.stringify(parsedResponse))
-  },
-
-  getInversePredicatedObjects: function(predicate) {
-    const GET_INVERESE_PREDICATED_OBJ = 'SELECT DISTINCT ?objectInverse WHERE { ?s <' + predicate + '> ?o . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse FILTER REGEX(STR(?s), "http://www.profium.com/archive/") }'
-    const config = {
-      query: GET_INVERESE_PREDICATED_OBJ
-    }
-    this.query(config).then(response =>{
-      const data = response
-      const output = this.handleInversePredicatedObjectData(data)
-      console.warn(output)
-    })
-  },
-
-  handleInversePredicatedObjectData(data) {
-    let rawJSON = JSON.parse(data)
-    let resultArray = rawJSON.sparql.results.result
-    let parsedResponse = []
-    resultArray.forEach(element => {
-        let tmp = {
-            objectInverse: element.binding.uri
-        }
-        parsedResponse.push(tmp)
-    })
-    return JSON.parse(JSON.stringify(parsedResponse))
-},
-
-  xml2json: function(xml, tab) {
+function xml2json(xml, tab) {
     xml = parser.parseFromString(xml, "text/xml")
     var X = {
         toObj: function (xml) {
@@ -267,16 +215,125 @@ export default API = {
         xml = xml.documentElement
     var json = X.toJson(X.toObj(X.removeWhite(xml)), xml.nodeName, "\t")
     return "{\n" + tab + (tab ? json.replace(/\t/g, tab) : json.replace(/\t|\n/g, "")) + "\n}"
-},
+}
 
-  getLargeThumbnailImage: function(imageUrl) {
-  
-    return `${DISPLAY_URL_START}${imageUrl}${IMG_TYPE_LARGE_THUMB}`
-  },
+function getPredicateObjects(predicate) {
+    return new Promise(function (resolve, reject) {
+        let jsonResponse = ""
+        let query = constructFollowupQuery(predicate)
+        let xhr = createCORSRequest('GET', backendURL + query)
 
-  getNormalImage: function(imageUrl) {
+        xhr.onload = () => {
+            // Process our return data
+            //console.log(parseResponse(xhr.responseText));
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // This will run when the request is successful
+                jsonResponse = parseFollowupResponse(xhr.responseText)
+                resolve(jsonResponse)
+            } else {
+                // This will run when it's not
+                console.log('The request failed!')
+                //something should happen here
+            }
+        }
+        xhr.send()
+    })
+}
 
-    return `${DISPLAY_URL_START}${imageUrl}${IMG_TYPE_NORMAL}`
-  }
+function parseFollowupResponse(responseText) {
+    let rawJSONstring = xml2json(responseText, " ")
+    let rawJSON = JSON.parse(rawJSONstring)
+    console.log(rawJSON)
+    let resultArray = rawJSON.sparql.results.result
+    let parsedResponse = []
+    if (resultArray instanceof Array) {
+        resultArray.forEach(element => {
+            let tmp = {
+                label: element.binding[0].literal? element.binding[0].literal['#text'] : element.binding[0].uri.split('#')[1],
+                count: element.binding[1].literal['#text']
+            }
+            parsedResponse.push(tmp)
+        })
+    } else {
+        console.log(resultArray.binding[0])
+        console.log(resultArray.binding[1])
 
+        let tmp = {
+            label: resultArray.binding[0].literal? resultArray.binding[0].literal['#text'] : resultArray.binding[0].uri.split('#')[1],
+            count: resultArray.binding[1].literal['#text']
+        }
+        parsedResponse.push(tmp)
+    }
+
+    return JSON.parse(JSON.stringify(parsedResponse))
+}
+
+function constructFollowupQuery(predicate) {
+    return '?query=SELECT ?o (COUNT(?s) AS ?COUNT) WHERE { ?s <' + predicate + '> ?o FILTER regex(STR(?s), "http://www.profium.com/archive/")} GROUP BY ?o'
+}
+
+function getInverseObjects(predicate) {
+    return new Promise(function (resolve, reject) {
+        let jsonResponse = ""
+        let query = constructInverseObjectsQuery(predicate)
+        let xhr = createCORSRequest('GET', backendURL + query)
+
+        xhr.onload = () => {
+            // Process our return data
+            // console.log(parseInverseObjectsResponse(xhr.responseText));
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // This will run when the request is successful
+                jsonResponse = parseInverseObjectsResponse(xhr.responseText)
+                resolve(jsonResponse)
+            } else {
+                // This will run when it's not
+                console.log('The request failed!')
+                //something should happen here
+            }
+        }
+        xhr.send()
+    })
+}
+
+function constructInverseObjectsQuery(predicate) {
+    return '?query=SELECT DISTINCT ?objectInverse WHERE { ?s <' + predicate + '> ?o . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse FILTER REGEX(STR(?s), "http://www.profium.com/archive/") }'
+}
+
+function parseInverseObjectsResponse(responseText) {
+    let rawJSONstring = xml2json(responseText, " ")
+    let rawJSON = JSON.parse(rawJSONstring)
+    let resultArray = rawJSON.sparql.results.result
+    let parsedResponse = []
+    resultArray.forEach(element => {
+        let tmp = {
+            objectInverse: element.binding.uri
+        }
+        parsedResponse.push(tmp)
+    })
+    return JSON.parse(JSON.stringify(parsedResponse))
+}
+
+function getImage(uri, type) {
+    return new Promise(function (resolve, reject) {
+        let query = constructImageQuery(uri, type)
+        let xhr = createCORSRequest('GET', imageBackendURL + query)
+        xhr.responseType = 'blob'
+        xhr.onload = () => {
+            // Process our return data
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // This will run when the request is successful
+                let createdObject = window.URL.createObjectURL(xhr.response)
+                resolve(createdObject)
+            } else {
+                // This will run when it's not
+                console.log('The request failed!')
+                //something should happen here
+            }
+        }
+        xhr.send()
+    })
+}
+
+function constructImageQuery(uri, type) {
+    return '?uri=' + uri + '&type=' + type
 }

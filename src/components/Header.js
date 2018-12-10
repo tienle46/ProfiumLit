@@ -5,7 +5,6 @@ const searchIcon = require('../assets/images/search.png')
 // const dimensions = Dimensions.get('window')
 
 export default class Header extends Component{
-
     render(){
         return(
             <View style = {styles.container}>

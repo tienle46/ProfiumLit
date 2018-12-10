@@ -58,11 +58,12 @@ export default class MainScreen extends Component {
     }
 
     async componentDidMount() {
-        const dataList = await this._createDataList()
-        this.setState({
-            dataList: dataList,
-            isLoading: false
-        })
+        // const dataList = await this._createDataList()
+        // this.setState({
+        //     dataList: dataList,
+        //     isLoading: false
+        // })
+        console.log(await API.getInversePredicatedObjects('http://www.profium.com/tuomi/alkamisajankohta'))
     }
 
     onItemClicked = (key) => {
