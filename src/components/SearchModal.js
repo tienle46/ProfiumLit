@@ -47,7 +47,7 @@ export default class SearchModal extends Component{
                 <View style = {{width: '80%', marginTop: '5%'}}>
                     <Text>Location</Text>
                     <Picker 
-                            mode = {"dropdown"} 
+                            // mode = {"dialog"} 
                             selectedValue = {this.props.selected} 
                             onValueChange = {(value) => this.setState({selected:value})}>
                         <Item value = {'Helsinki'} label = {'Helsinki'} />

@@ -58,13 +58,21 @@ export class ResponsiveImage extends Component {
         }
     }
     componentDidMount() {
+        this.isMounted = true
         const { uri } = this.props.source
         Image.getSize(uri, (width, height) => {
-            this.setState({
+            if(this.isMounted) {
+                this.setState({
                 imageRatio: height * 1.0 / width
             })
+            }
         })
     }
+
+    componentWillUnmount() {
+        this.isMounted = false
+    }
+
     onLayout = (e) => {
         const {width, height} = e.nativeEvent.layout
         this.setState({width})
