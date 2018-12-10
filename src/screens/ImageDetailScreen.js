@@ -7,15 +7,26 @@ import RouteNames from '../routes/RouteNames'
 import Header from '../components/Header'
 import ImgCard from '../components/ImgCard'
 import {ResponsiveImage} from '../components/CategoryCard'
+const searchIcon = require('../assets/images/search.png')
 const dimensions = {width: Dimensions.get('window').width, height: Dimensions.get('window').height}
 const B = (props) => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>
 
 export default class ImageDetailScreen extends Component {
-    static navigationOptions = {
-        headerTitle:(
-        <Header />
-        ),
-        headerTintColor: 'black',
+    static navigationOptions = ({navigation}) => {
+        return {
+            headerTitle:(
+            <Header />
+            ),
+            headerTintColor: 'black',
+            headerRight: (
+            <TouchableOpacity
+                onPress={navigation.state.params.openSearch}
+                style = {{marginRight: 20}}
+            >
+                <Image source = {searchIcon} style = {styles.search} resizeMode = 'contain'/>
+            </TouchableOpacity>
+            ),
+        }
     }
 
     render() {
@@ -56,6 +67,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 5,
         padding: 0
+    },
+    search: {
+        width: 30, 
+        height: 30,
+        opacity: 0
     }
 })
 
