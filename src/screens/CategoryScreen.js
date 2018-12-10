@@ -53,22 +53,23 @@ export default class CategoryScreen extends Component {
         })
     }
 
-    _createDataList(imageUrls) {
+    _createDataList(data) {
         let dataList = []
-        for (let i = 0; i<imageUrls.length; i++) {
-            let data = {key: `${i+1}`, url: API.getNormalImage(imageUrls[i])}
-            dataList.push(data)
+        for(let i = 0; i< data.urls.length; i++) {
+            let image = API.getNormalImage(data.urls[i])
+            let item ={key: `${i}`,url: image}
+            dataList.push(item)
         }
-        return dataList
+        return dataList.slice(1,dataList.length-1) //why a docx file go into the database???
     } 
 
     componentDidMount() {
         this.props.navigation.setParams({ openSearch: this._onPressAdd });
-        const imageUrls = Router.getParam(this,'imageUrls')
-        const dataList = this._createDataList(imageUrls)
+        const data = Router.getParam(this,'data')
+        const dataList = this._createDataList(data)
 
         this.setState({
-            dataList : dataList.slice(0,15),
+            dataList : dataList,
             isLoading : false
         })
     }
@@ -86,7 +87,6 @@ export default class CategoryScreen extends Component {
             //     />
             // </TouchableOpacity>
             <ImgCard
-            
                 cardImage = {item.url}
                 title = 'Title'
                 description = 'Description'

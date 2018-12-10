@@ -82,7 +82,6 @@ export default class MainScreen extends Component {
                 data = this.state.dataList[i]
             }
         }
-        console.warn(data)
         Router.navigate(RouteNames.Category, {data: data})
     }
 
