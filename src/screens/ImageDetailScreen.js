@@ -41,19 +41,21 @@ const styles = StyleSheet.create({
     },
     imgDetail: {
         width: '100%',
-        marginBottom: 10
+        marginBottom: 5,
     },
     propertyDetail: {
         width: '80%',
-        marginBottom: 10
+        marginBottom: 5
     },
     title: {
-        fontSize: 18,
-        marginBottom: 5,
+        fontSize: 16,
+        marginBottom: 2,
+        padding: 0
     },
     time: {
         fontSize: 16,
-        marginBottom: 10
+        marginBottom: 5,
+        padding: 0
     }
 })
 
