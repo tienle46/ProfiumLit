@@ -18,12 +18,12 @@ export default class CategoryScreen extends Component {
         return {
             headerStyle: { backgroundColor: '#faf6e9'},
             headerTitle:(
-            <Header moveRight = {false}/>
+            <Header />
             ),
             headerTintColor: '#494949',
             headerRight: (
             <TouchableOpacity
-                // onPress={navigation.state.params.openSearch}
+                onPress={navigation.state.params.openSearch}
                 style = {{marginRight: 20}}
             >
                 <Image source = {searchIcon} style = {styles.search} resizeMode = 'contain'/>
@@ -45,7 +45,6 @@ export default class CategoryScreen extends Component {
         this.setState({
             showSearchModal: true
         })
-
     }
 
     _closeSearchModal = () => {
@@ -61,11 +60,11 @@ export default class CategoryScreen extends Component {
             let item ={key: `${i}`,url: image}
             dataList.push(item)
         }
-        return dataList.slice(1,dataList.length) //why a docx file go into the database???
+        return dataList
     } 
 
     componentDidMount() {
-        // this.props.navigation.setParams({ openSearch: this._onPressAdd });
+        this.props.navigation.setParams({ openSearch: this._onPressAdd });
         const data = Router.getParam(this,'data')
         const dataList = this._createDataList(data)
 
@@ -162,7 +161,6 @@ const styles = StyleSheet.create({
     search: {
         width: 30,
         height: 30,
-        opacity: 0
     },
     blur: {
         position: 'absolute',

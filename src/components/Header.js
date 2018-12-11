@@ -8,7 +8,6 @@ export default class Header extends Component{
     render(){
         return(
             <View style = {styles.container}>
-                {this.props.moveRight ? <View style = {{width: 65}}></View> : null}
                 <Image source = {logo} style = {styles.logo} resizeMode = 'contain' />
             </View>
         )

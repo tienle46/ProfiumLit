@@ -16,7 +16,7 @@ export default class ImageDetailScreen extends Component {
         return {
             headerStyle: { backgroundColor: '#faf6e9'},
             headerTitle:(
-            <Header moveRight = {false}/>
+            <Header />
             ),
             headerTintColor: '#494949',
             headerRight: (

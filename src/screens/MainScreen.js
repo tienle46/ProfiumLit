@@ -17,7 +17,7 @@ export default class MainScreen extends Component {
         return {
             headerStyle: { backgroundColor: '#faf6e9'},
             headerTitle:(
-            <Header moveRight = {true}/>
+            <Header/>
             ),
             headerTintColor: '#494949',
             headerRight: (
@@ -36,37 +36,17 @@ export default class MainScreen extends Component {
         this.state = {
             dataList: [],
             isLoading: true,
-            showSearchModal: false
         }
     }
 
-    _onPressAdd = () => {
-        this.setState({
-            showSearchModal: true
-        })
-
-    }
-
-    _closeSearchModal = () => {
-        this.setState({
-            showSearchModal: false
-        })
-    }
-
-    _createData = (index, label, date, count, urls, thumbnail) => {
-        return({index: index, key: label, date: date, count: count, urls:urls, thumbnail: thumbnail})
+    _createData = (index, tag, count, urls, thumbnail) => {
+        return({index: index, key: tag, count: count, urls:urls, thumbnail: thumbnail})
     }
 
 
-
-    _getAllImageByLabel = async (predicate) => {
-        const data = await API.getInversePredicatedObjects(predicate)
-        return data //data.objectInverse
-    }
-
-    _getImageDate = async (predicate) => {
-        const data = await API.getPredicatedObjects(predicate)
-        return data //data.date
+    _getAllImageByTag = async (tag) => {
+        const data = await API.getUrlsByTag(tag)
+        return data //data.url
     }
 
     _getRandomThumbnail = (listUrl) => {
@@ -74,30 +54,28 @@ export default class MainScreen extends Component {
         return listUrl[randomNumber]
     }
 
-    _getAllProps = async () => {
-        const data = await API.fetchAll()
-        return data //{data.predicate,data.lable,data.count}
+    _getAllTags = async () => {
+        const data = await API.getAllTags()
+        return data //{data.tag}
     }
 
     _createDataList = async () => {
-        const allProps = await this._getAllProps()
+        const allTags = await this._getAllTags()
         let dataList = []
-        for (let i = 0; i< allProps.length; i++) {
-            const objectInverses = await this._getAllImageByLabel(allProps[i].predicate)
+        for (let i = 0; i< allTags.length; i++) {
+            const urls = await this._getAllImageByTag(allTags[i].tag)
             let allUrls = []
-            for(let i = 0; i< objectInverses.length; i++) {
-                allUrls.push(objectInverses[i].objectInverse)
+            for(let i = 0; i< urls.length; i++) {
+                allUrls.push(urls[i].url)
             }
-            const date = await this._getImageDate(allProps[i].predicate)
             const thumbnail = API.getNormalImage(this._getRandomThumbnail(allUrls))
-            const data = this._createData(i, allProps[i].label, date[0].date, allProps[i].count, allUrls, thumbnail)
+            const data = this._createData(i, allTags[i].tag, allUrls.length, allUrls, thumbnail)
             dataList.push(data)
         }
         return dataList
     }
 
     async componentDidMount() {
-        this.props.navigation.setParams({ openSearch: this._onPressAdd });
         const dataList = await this._createDataList()
         this.setState({
             dataList: dataList,
@@ -130,32 +108,6 @@ export default class MainScreen extends Component {
         )
     }
 
-    renderSearchModal = () => {
-        if(this.state.showSearchModal && Platform.OS === 'ios') {
-            return <BlurView 
-            blurType = 'light'
-            blurAmount = {5}
-            style = {style = styles.blur}>
-                <View style = {styles.searchWrapper}>
-                    <SearchModal 
-                        closeOnPress = {this._closeSearchModal}
-                    />
-                </View>
-            </BlurView>
-        }
-        else if (this.state.showSearchModal && Platform.OS === 'android') {
-            return <View style = {styles.searchWrapperAndroid}>
-            <View style = {{marginTop: '-20%'}}>
-                <SearchModal 
-                    closeOnPress = {this._closeSearchModal}
-                />
-            </View>
-        </View> 
-        } else {
-            return null
-        }
-    }
-
     render() {
         if(this.state.isLoading) {
             return (
@@ -174,7 +126,6 @@ export default class MainScreen extends Component {
                     extraData = {this.state.isLoading}
                     showsVerticalScrollIndicator={false}
                 />
-                {this.renderSearchModal()}
             </View>
         )
     }
@@ -195,7 +146,8 @@ const styles = StyleSheet.create({
     },
     search: {
         width: 30,
-        height: 30
+        height: 30,
+        opacity: 0
     },
     blur: {
         position: 'absolute',
