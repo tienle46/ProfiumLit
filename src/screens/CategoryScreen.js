@@ -41,6 +41,10 @@ export default class CategoryScreen extends Component {
         }
     }
 
+    onReceiveDataFromSearchModal = (year) => {
+        console.warn(year)
+    }
+
     _onPressAdd = () => {
         this.setState({
             showSearchModal: true
@@ -105,6 +109,7 @@ export default class CategoryScreen extends Component {
                 <View style = {styles.searchWrapper}>
                     <SearchModal 
                         closeOnPress = {this._closeSearchModal}
+                        callbackFromScreen = {this.onReceiveDataFromSearchModal}
                     />
                 </View>
             </BlurView>
@@ -114,6 +119,7 @@ export default class CategoryScreen extends Component {
             <View style = {{marginTop: '-30%'}}>
                 <SearchModal 
                     closeOnPress = {this._closeSearchModal}
+                    callbackFromScreen = {this.onReceiveDataFromSearchModal}
                 />
             </View>
         </View> 

@@ -43,7 +43,6 @@ export default class MainScreen extends Component {
         return({index: index, key: tag, count: count, urls:urls, thumbnail: thumbnail})
     }
 
-
     _getAllImageByTag = async (tag) => {
         const data = await API.getUrlsByTag(tag)
         return data //data.url
@@ -101,7 +100,7 @@ export default class MainScreen extends Component {
                     categoryName = {item.key}
                     cardImage = {item.thumbnail}
                     showDescription = {true}
-                    photoCount = {this.state.dataList[item.index].count-1} //Not counting docx file
+                    photoCount = {this.state.dataList[item.index].count}
                 />
             </View>
             

@@ -5,11 +5,11 @@ import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, TextInput, 
 export default class SearchModal extends Component{
     constructor(props) {
         super(props)
-        this.state = {year: 2000, selected: 'Helsinki'}
+        this.state = {year: 2000}
     }
 
-    getVal(val){
-        console.warn(val);
+    getDateValue = () => {
+        this.props.callbackFromScreen(this.state.year)
     }   
 
     render(){
@@ -38,8 +38,7 @@ export default class SearchModal extends Component{
                         minimumValue={2000}
                         maximumValue={2018}
                         value={this.props.year}
-                        onValueChange={val => this.setState({ year: val })}
-                        onSlidingComplete={ val => this.getVal(val)}
+                        onSlidingComplete={ val => this.setState({year:val})}
                     />
                     <Text style = {{textAlign: 'center', marginBottom: 0}}>{this.state.year}</Text>
                 </View>
@@ -58,7 +57,7 @@ export default class SearchModal extends Component{
 
                 <View style = {{width: '40%', marginTop: '8%'}}>
                     <Button
-                        onPress={this.props.onPress}
+                        onPress={this.getDateValue}
                         title="Filter"
                         color="#494949"
                     />
