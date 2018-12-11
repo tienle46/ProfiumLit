@@ -60,7 +60,7 @@ export default class CategoryScreen extends Component {
             let item ={key: `${i}`,url: image}
             dataList.push(item)
         }
-        return dataList.slice(1,dataList.length-1) //why a docx file go into the database???
+        return dataList.slice(1,dataList.length) //why a docx file go into the database???
     } 
 
     componentDidMount() {
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         flex:1,
         flexDirection: 'row',
+        backgroundColor: 'white'
     },
     list: {
         width: '100%',

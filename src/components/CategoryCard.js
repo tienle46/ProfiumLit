@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, Dimensions, Image} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity} from 'react-native'
 
 export default class CategoryCard extends Component {
     render() {
@@ -7,11 +7,7 @@ export default class CategoryCard extends Component {
             container: {
                 justifyContent: 'space-between',
                 backgroundColor: 'white',
-                borderRadius: 4,
                 overflow: 'hidden',
-                borderWidth: 0.3,
-                borderColor: '#333333',
-                borderRadius: 4,
             },
             wrapper: {
                 flex: 1,
@@ -19,30 +15,55 @@ export default class CategoryCard extends Component {
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.5,
                 shadowRadius: 1,
-                borderRadius: 4,
 
             },
             image: {
                 width: '100%',
+                height: 150
+            },
+            detail: {
+                paddingTop: 10,
+                flex: 1,
+                flexDirection: 'row'
             },
             text: {
+                width: '50%',
                 height: 36,
                 backgroundColor: '#aebc22',
                 color: 'white',
                 paddingVertical: 8,
                 textAlign: 'center',
                 fontSize: 14,
-                fontWeight: '500'
+                fontWeight: '500',
+                padding: 0,
+                margin: 0,
+                borderRadius: 50
+                
+            },
+            number: {
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                width: '50%',
+                padding: 0,
+                margin: 0,
             }
         })
         return(
             <View style={styles.wrapper}>
                 <View style = {styles.container}>
-                    <ResponsiveImage
-                        source = {{uri : this.props.cardImage}}
-                        style={styles.image}
-                    />
-                    {this.props.showDescription ? <Text style={styles.text}>{this.props.categoryName}</Text> : null}
+                    <TouchableOpacity onPress = {this.props.onPress}>
+                        <ResponsiveImage
+                            source = {{uri : this.props.cardImage}}
+                            style={styles.image}
+                        />
+                    </TouchableOpacity>
+
+                    <View style = {styles.detail}>
+                        {this.props.showDescription ? <Text style={styles.text}>{this.props.categoryName}</Text> : null}
+                        <View style = {styles.number}>
+                            <Text style = {{fontSize: 14}}>{this.props.photoCount} photos</Text>
+                        </View>
+                    </View>
                 </View>
             </View>
         )

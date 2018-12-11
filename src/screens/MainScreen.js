@@ -24,8 +24,8 @@ export default class MainScreen extends Component {
         }
     }
 
-    _createData = (label, date, count, urls, thumbnail) => {
-        return({key: label, date: date, count, urls:urls, thumbnail})
+    _createData = (index, label, date, count, urls, thumbnail) => {
+        return({index: index, key: label, date: date, count: count, urls:urls, thumbnail: thumbnail})
     }
 
 
@@ -61,7 +61,7 @@ export default class MainScreen extends Component {
             }
             const date = await this._getImageDate(allProps[i].predicate)
             const thumbnail = API.getNormalImage(this._getRandomThumbnail(allUrls))
-            const data = this._createData(allProps[i].label, date[0].date, allProps[i].count, allUrls, thumbnail)
+            const data = this._createData(i, allProps[i].label, date[0].date, allProps[i].count, allUrls, thumbnail)
             dataList.push(data)
         }
         return dataList
@@ -87,13 +87,15 @@ export default class MainScreen extends Component {
 
     renderItem = ({item}) => {
         return(
-            <TouchableOpacity style = {styles.item} onPress = {() => this.onItemClicked(item.key)}>
+            <View style = {styles.item}> 
                 <CategoryCard
+                    onPress = {() => this.onItemClicked(item.key)}
                     categoryName = {item.key}
                     cardImage = {item.thumbnail}
                     showDescription = {true}
+                    photoCount = {this.state.dataList[item.index].count-1} //Not counting docx file
                 />
-            </TouchableOpacity>
+            </View>
             
         )
     }
@@ -124,7 +126,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
         flex:1,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'white'
     },
     list: {
         width: '100%',
