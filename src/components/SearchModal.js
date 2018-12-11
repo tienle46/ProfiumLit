@@ -44,7 +44,7 @@ export default class SearchModal extends Component{
                     <Text style = {{textAlign: 'center', marginBottom: 0}}>{this.state.year}</Text>
                 </View>
                 
-                <View style = {{width: '80%', marginTop: '5%'}}>
+                {/* <View style = {{width: '80%', marginTop: '5%'}}>
                     <Text>Location</Text>
                     <Picker 
                             // mode = {"dialog"} 
@@ -54,7 +54,7 @@ export default class SearchModal extends Component{
                         <Item value = {'Espoo'} label = {'Espoo'} />
                         <Item value = {'Vantaa'} label = {'Vantaa'} />
                     </Picker>
-                </View>
+                </View> */}
 
                 <View style = {{width: '40%', marginTop: '8%'}}>
                     <Button
@@ -71,8 +71,12 @@ const styles = StyleSheet.create({
     searchBox: {
         alignItems: 'center',
         width: Dimensions.get('window').width * 0.95,
-        height: Dimensions.get('window').height * 0.6,
-        backgroundColor: 'white'
+        height: Dimensions.get('window').height * 0.5,
+        backgroundColor: 'white',
+        shadowColor: '#333333',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 1,
     },
     closeButton: {
         position: 'absolute',

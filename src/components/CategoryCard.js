@@ -8,13 +8,14 @@ export default class CategoryCard extends Component {
                 justifyContent: 'space-between',
                 backgroundColor: 'white',
                 overflow: 'hidden',
+                padding: 10
             },
             wrapper: {
                 flex: 1,
                 shadowColor: '#333333',
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.5,
-                shadowRadius: 1,
+                shadowOffset: { width: 2, height: 2 },
+                shadowOpacity: 0.3,
+                shadowRadius: 7,
 
             },
             image: {

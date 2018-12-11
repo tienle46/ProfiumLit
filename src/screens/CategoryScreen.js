@@ -22,7 +22,7 @@ export default class CategoryScreen extends Component {
             headerTintColor: 'black',
             headerRight: (
             <TouchableOpacity
-                onPress={navigation.state.params.openSearch}
+                // onPress={navigation.state.params.openSearch}
                 style = {{marginRight: 20}}
             >
                 <Image source = {searchIcon} style = {styles.search} resizeMode = 'contain'/>
@@ -64,7 +64,7 @@ export default class CategoryScreen extends Component {
     } 
 
     componentDidMount() {
-        this.props.navigation.setParams({ openSearch: this._onPressAdd });
+        // this.props.navigation.setParams({ openSearch: this._onPressAdd });
         const data = Router.getParam(this,'data')
         const dataList = this._createDataList(data)
 
@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
     },
     search: {
         width: 30,
-        height: 30
+        height: 30,
+        opacity: 0
     },
     blur: {
         position: 'absolute',
