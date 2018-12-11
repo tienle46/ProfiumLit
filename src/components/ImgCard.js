@@ -6,6 +6,9 @@ const dimensions = {width: Dimensions.get('window').width, height: Dimensions.ge
 export default class ImgCard extends Component {
     render() {
         const styles = StyleSheet.create({
+            container: {
+                elevation: 2,
+            },
             imgView: {
                 margin: 5,
                 width: this.props.itemWidth,
@@ -14,9 +17,11 @@ export default class ImgCard extends Component {
         })
 
         return (
-            <TouchableOpacity style = {styles.container} onPress = {this.props.onPress}>
+            <View style = {styles.container}>
+                <TouchableOpacity onPress = {this.props.onPress}>
                     <ResponsiveImage source = {{uri : this.props.cardImage}} style = {styles.imgView}/>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </View>
         )
     }
 }

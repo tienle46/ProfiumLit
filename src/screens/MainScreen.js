@@ -15,11 +15,11 @@ const dimensions = Dimensions.get('window')
 export default class MainScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
-            // headerStyle: { backgroundColor: '#d49b47'},
+            headerStyle: { backgroundColor: '#faf6e9'},
             headerTitle:(
-            <Header />
+            <Header moveRight = {true}/>
             ),
-            headerTintColor: 'black',
+            headerTintColor: '#494949',
             headerRight: (
             <TouchableOpacity
                 onPress={navigation.getParam('openSearch')}
@@ -145,7 +145,7 @@ export default class MainScreen extends Component {
         }
         else if (this.state.showSearchModal && Platform.OS === 'android') {
             return <View style = {styles.searchWrapperAndroid}>
-            <View style = {{marginTop: '-30%'}}>
+            <View style = {{marginTop: '-20%'}}>
                 <SearchModal 
                     closeOnPress = {this._closeSearchModal}
                 />
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         flex:1,
         alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: '#ece8d9'
     },
     list: {
         width: '100%',

@@ -14,11 +14,11 @@ const B = (props) => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>
 export default class ImageDetailScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
-            // headerStyle: { backgroundColor: '#d49b47'},
+            headerStyle: { backgroundColor: '#faf6e9'},
             headerTitle:(
-            <Header />
+            <Header moveRight = {false}/>
             ),
-            headerTintColor: 'black',
+            headerTintColor: '#494949',
             headerRight: (
             <TouchableOpacity
                 onPress={navigation.state.params.openSearch}
@@ -36,9 +36,10 @@ export default class ImageDetailScreen extends Component {
                 <ResponsiveImage style = {styles.imgDetail} source = {{uri : Router.getParam(this,'imageUrl').url}}/>
 
                 <View style = {styles.propertyDetail}>
-                    <Text style = {styles.title}><B>title</B> by <B>author</B></Text>
-                    <Text style = {styles.time}><B>time</B>: 00/00/0000</Text>
-                    <Text style = {styles.description}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text> 
+                    <Text style = {styles.detail}><B>Title:</B> null</Text>
+                    <Text style = {styles.detail}><B>User:</B> null</Text>
+                    <Text style = {styles.detail}><B>Time:</B> null</Text>
+                    <Text style = {styles.detail}><B>Description</B> null</Text>
                 </View>
             </ScrollView>
         )
@@ -47,26 +48,22 @@ export default class ImageDetailScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         width: dimensions.width,
+        height: '100%',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: '#ece8d9'
     },
     imgDetail: {
-        width: '100%',
-        marginBottom: 5,
+        width: '100%'
     },
     propertyDetail: {
-        width: '80%',
-        marginBottom: 5
+        width: '85%',
+        marginTop: 20,
     },
-    title: {
+    detail: {
         fontSize: 16,
-        marginBottom: 2,
-        padding: 0
-    },
-    time: {
-        fontSize: 16,
-        marginBottom: 5,
+        color: '#494949',
+        marginBottom: 10,
         padding: 0
     },
     search: {

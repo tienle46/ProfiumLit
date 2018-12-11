@@ -6,9 +6,10 @@ export default class CategoryCard extends Component {
         const styles = StyleSheet.create({
             container: {
                 justifyContent: 'space-between',
-                backgroundColor: 'white',
+                backgroundColor: '#fffdf6',
                 overflow: 'hidden',
-                padding: 10
+                paddingTop: 10, paddingHorizontal: 10,
+                elevation: 5,
             },
             wrapper: {
                 flex: 1,
@@ -23,22 +24,19 @@ export default class CategoryCard extends Component {
                 height: 150
             },
             detail: {
-                paddingTop: 10,
                 flex: 1,
                 flexDirection: 'row'
             },
             text: {
                 width: '50%',
                 height: 36,
-                backgroundColor: '#aebc22',
-                color: 'white',
+                color: '#494949',
                 paddingVertical: 8,
-                textAlign: 'center',
+                textAlign: 'left',
                 fontSize: 14,
                 fontWeight: '500',
                 padding: 0,
                 margin: 0,
-                borderRadius: 50
                 
             },
             number: {
@@ -62,7 +60,7 @@ export default class CategoryCard extends Component {
                     <View style = {styles.detail}>
                         {this.props.showDescription ? <Text style={styles.text}>{this.props.categoryName}</Text> : null}
                         <View style = {styles.number}>
-                            <Text style = {{fontSize: 14}}>{this.props.photoCount} photos</Text>
+                            <Text style = {{fontSize: 14, color: '#494949'}}>{this.props.photoCount} photos</Text>
                         </View>
                     </View>
                 </View>

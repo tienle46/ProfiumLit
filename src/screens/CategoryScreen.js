@@ -16,10 +16,11 @@ const dimensions = Dimensions.get('window')
 export default class CategoryScreen extends Component {
     static navigationOptions = ({navigation}) => {
         return {
+            headerStyle: { backgroundColor: '#faf6e9'},
             headerTitle:(
-            <Header />
+            <Header moveRight = {false}/>
             ),
-            headerTintColor: 'black',
+            headerTintColor: '#494949',
             headerRight: (
             <TouchableOpacity
                 // onPress={navigation.state.params.openSearch}
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         flex:1,
         flexDirection: 'row',
-        backgroundColor: 'white'
+        backgroundColor: '#ece8d9'
     },
     list: {
         width: '100%',
