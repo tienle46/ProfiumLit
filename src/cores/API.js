@@ -4,7 +4,6 @@ const IMAGE = '<http://www.profium.com/archive/Image>'
 const DEPICTED_OBJ = '<http://www.profium.com/archive/depictedObject>'
 const DEPICTED_OBJ_INV = '<http://www.profium.com/archive/depictedObjectInverse>'
 const URL_PREFIX = 'https://m1.profium.com/displayContent.do?uri='
-const IMG_TYPE_LARGE_THUMB = '&type=largeThumb'
 const IMG_TYPE_NORMAL = '&type=normal'
 const TAG = '<http://www.profium.com/tuomi/asiakirjatyypinTarkenne>'
 const MOD_DATE = '<http://www.profium.com/city/muokkausaika>'
@@ -276,11 +275,6 @@ export default API = {
             xml = xml.documentElement
         var json = X.toJson(X.toObj(X.removeWhite(xml)), xml.nodeName, "\t")
         return "{\n" + tab + (tab ? json.replace(/\t/g, tab) : json.replace(/\t|\n/g, "")) + "\n}"
-    },
-
-    getLargeThumbnailImage: function(imageUrl) {
-    
-        return `${URL_PREFIX}${imageUrl}${IMG_TYPE_LARGE_THUMB}`
     },
 
     getNormalImage: function(imageUrl) {
