@@ -146,6 +146,9 @@ export default API = {
     },
     handleUrlsData: function(data) {
         let rawJSON = JSON.parse(data)
+        if(!rawJSON.sparql.results) {
+            return null
+        }
         let resultArray = rawJSON.sparql.results.result
         let parsedResponse = []
         resultArray.forEach(element => {
@@ -155,6 +158,17 @@ export default API = {
             parsedResponse.push(tmp)
         })
         return JSON.parse(JSON.stringify(parsedResponse))
+    },
+    getUrlsByYearAndTag : async function(year, tag) {
+        let startDate = `${year}-01-01T00:00:00`
+        let endDate = `${year}-12-31T23:59:59`
+        const GET_URLS_BY_YEAR = `SELECT DISTINCT ?url WHERE { ?depic ${MOD_DATE} ?date . FILTER ( ?date >= '${startDate}'^^xsd:dateTime %26%26 ?date <= '${endDate}'^^xsd:dateTime )  ?depic ${DEPICTED_OBJ_INV} ?url . ?depic ${DOC_SPECIFIER} '${tag}' }`
+        const config = {
+            query : GET_URLS_BY_YEAR
+        }
+        const res = await this.query(config)
+        const output = this.handleUrlsData(res)
+        return output
     },
     xml2json: function(xml, tab) {
         xml = parser.parseFromString(xml, "text/xml")

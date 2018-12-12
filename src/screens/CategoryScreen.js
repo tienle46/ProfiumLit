@@ -9,6 +9,7 @@ import ImgCard from '../components/ImgCard'
 import SearchModal from '../components/SearchModal'
 const searchIcon = require('../assets/images/search.png')
 import { BlurView, VibrancyView } from 'react-native-blur';
+import Toast from '../components/Toast'
 
 const FLATLIST_COLUMN_NUM = 3
 const dimensions = Dimensions.get('window')
@@ -37,12 +38,20 @@ export default class CategoryScreen extends Component {
         this.state = {
             dataList : [],
             isLoading : true,
-            showSearchModal: false
+            showSearchModal: false,
+            noDataShowing: false
         }
     }
 
-    onReceiveDataFromSearchModal = (year) => {
-        console.warn(year)
+    onReceiveDataFromSearchModal = async (year) => {
+        const tag = Router.getParam(this, 'data').key
+        const res = await API.getUrlsByYearAndTag(year, tag)
+        if(!res) {
+            Toast.show('No data matched your search')
+        } else {
+            const dataList = this._createSearchResultList(res)
+            this.setState({dataList: dataList})
+        }
     }
 
     _onPressAdd = () => {
@@ -56,6 +65,16 @@ export default class CategoryScreen extends Component {
             showSearchModal: false
         })
     }
+
+    _createSearchResultList(data) {
+        let dataList = []
+        for(let i = 0; i< data.length; i++) {
+            let image = API.getNormalImage(data[i].url)
+            let item ={key: `${i}`,url: image}
+            dataList.push(item)
+        }
+        return dataList
+    } 
 
     _createDataList(data) {
         let dataList = []
@@ -79,7 +98,7 @@ export default class CategoryScreen extends Component {
     }
 
     onItemClicked = (key) => {
-        Router.navigate(RouteNames.Detail, {imageUrl: this.state.dataList[key-1]})
+        // Router.navigate(RouteNames.Detail, {imageUrl: this.state.dataList[key-1]})
     }
 
     renderItem = ({item}) => {
@@ -136,19 +155,27 @@ export default class CategoryScreen extends Component {
                 </View>
             )
         }
-        return(
-            <View style = {styles.container}>
-                <FlatList
-                    style = {styles.list}
-                    data = {this.state.dataList}
-                    numColumns = {FLATLIST_COLUMN_NUM}
-                    renderItem = {this.renderItem}
-                    extraData = {this.state.isLoading}
-                    showsVerticalScrollIndicator={false}
-                />
-                {this.renderSearchModal()}
-            </View>
-        )
+        if(this.state.noDataShowing) {
+            return(
+                <View style = {{flex:1, alignItems: 'center',backgroundColor: '#ece8d9'}}>
+                    <Text>No data matched your search</Text>
+                </View>
+            )
+        } else {
+            return(
+                <View style = {styles.container}>
+                    <FlatList
+                        style = {styles.list}
+                        data = {this.state.dataList}
+                        numColumns = {FLATLIST_COLUMN_NUM}
+                        renderItem = {this.renderItem}
+                        extraData = {this.state.isLoading}
+                        showsVerticalScrollIndicator={false}
+                    />
+                    {this.renderSearchModal()}
+                </View>
+            )
+        }
     }
 }
 const styles = StyleSheet.create({
