@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity} from 'react-native'
+import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native'
 import {ResponsiveImage} from '../components/CategoryCard'
 const dimensions = {width: Dimensions.get('window').width, height: Dimensions.get('window').height}
 

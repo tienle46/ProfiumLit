@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, TextInput, Slider, Picker, Item, Button } from 'react-native'
+import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, TextInput, Slider, Button } from 'react-native'
 
 
 export default class SearchModal extends Component{

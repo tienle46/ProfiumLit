@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity} from 'react-native'
+import {View, StyleSheet, Image} from 'react-native'
 const logo = require('../assets/images/logo.png')
-const searchIcon = require('../assets/images/search.png')
-// const dimensions = Dimensions.get('window')
 
 export default class Header extends Component{
     render(){

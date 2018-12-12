@@ -1,13 +1,10 @@
 import React, {Component} from 'react'
-import {View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, Image,Platform} from 'react-native'
+import {View, FlatList, StyleSheet, Dimensions, ActivityIndicator} from 'react-native'
 import API from '../cores/API'
 import CategoryCard from '../components/CategoryCard'
 import Router from '../routes/Router'
 import RouteNames from '../routes/RouteNames'
 import Header from '../components/Header'
-import { BlurView, VibrancyView } from 'react-native-blur'
-import SearchModal from '../components/SearchModal'
-const searchIcon = require('../assets/images/search.png')
 
 const FLATLIST_COLUMN_NUM = 1
 const dimensions = Dimensions.get('window')
@@ -19,8 +16,7 @@ export default class MainScreen extends Component {
             headerTitle:(
             <Header/>
             ),
-            headerTintColor: '#494949',
-            
+            headerTintColor: '#494949'
         }
     }
 
@@ -38,7 +34,7 @@ export default class MainScreen extends Component {
 
     _getAllImageByTag = async (tag) => {
         const data = await API.getUrlsByTag(tag)
-        return data //data.url
+        return data 
     }
 
     _getRandomThumbnail = (listUrl) => {
@@ -48,7 +44,7 @@ export default class MainScreen extends Component {
 
     _getAllTags = async () => {
         const data = await API.getAllTags()
-        return data //{data.tag}
+        return data 
     }
 
     _createDataList = async () => {

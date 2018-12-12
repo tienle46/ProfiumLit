@@ -1,11 +1,8 @@
 import React, {Component} from 'react'
-import {ScrollView, View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, Image} from 'react-native'
+import {ScrollView, View, Text, StyleSheet, Dimensions, TouchableOpacity, Image} from 'react-native'
 import API from '../cores/API'
-import CategoryCard from '../components/CategoryCard'
 import Router from '../routes/Router'
-import RouteNames from '../routes/RouteNames'
 import Header from '../components/Header'
-import ImgCard from '../components/ImgCard'
 import {ResponsiveImage} from '../components/CategoryCard'
 import moment from 'moment'
 const searchIcon = require('../assets/images/search.png')
