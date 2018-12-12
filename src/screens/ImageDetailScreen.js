@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     },
     propertyDetail: {
         width: '85%',
-        marginTop: 20,
+        marginVertical: 20,
     },
     detail: {
         fontSize: 16,

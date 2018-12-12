@@ -69,7 +69,7 @@ export default class CategoryScreen extends Component {
         let dataList = []
         for(let i = 0; i< data.length; i++) {
             let image = API.getNormalImage(data[i].url)
-            let item ={key: `${i}`,url: image}
+            let item ={key: `${i}`,url: image, originalUrl: data[i].url}
             dataList.push(item)
         }
         return dataList
@@ -184,10 +184,11 @@ const styles = StyleSheet.create({
     container: {
         flex:1,
         flexDirection: 'row',
-        backgroundColor: '#ece8d9'
+        backgroundColor: '#ece8d9',
     },
     list: {
         width: '100%',
+        marginVertical: 5
     },
     item: {
         marginBottom: dimensions.height * 0.02

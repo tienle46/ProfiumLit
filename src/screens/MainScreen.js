@@ -123,14 +123,15 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         flex:1,
         alignItems: 'center',
-        backgroundColor: '#ece8d9'
+        backgroundColor: '#ece8d9',
     },
     list: {
         width: '100%',
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        marginVertical: 10
     },
     item: {
-        marginVertical: dimensions.height * 0.02
+        marginVertical: 10
     },
     search: {
         width: 30,

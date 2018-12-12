@@ -4,13 +4,11 @@ const IMAGE = '<http://www.profium.com/archive/Image>'
 const DEPICTED_OBJ = '<http://www.profium.com/archive/depictedObject>'
 const DEPICTED_OBJ_INV = '<http://www.profium.com/archive/depictedObjectInverse>'
 const URL_PREFIX = 'https://m1.profium.com/displayContent.do?uri='
-const IMG_TYPE_THUMB = '&type=thumb'
 const IMG_TYPE_LARGE_THUMB = '&type=largeThumb'
 const IMG_TYPE_NORMAL = '&type=normal'
 const TAG = '<http://www.profium.com/tuomi/asiakirjatyypinTarkenne>'
 const MOD_DATE = '<http://www.profium.com/city/muokkausaika>'
 const NAME = '<http://www.profium.com/imagearchive/2007/name>'
-const DATE_FORMAT = '<http://www.w3.org/2001/XMLSchema#dateTime>'
 const OWNER = '<http://www.profium.com/tuomi/asiakirjanVastuuhenkilo>'
 const DESCRIPTION = '<http://www.profium.com/tuomi/asiakirjanKuvaus>'
 const IMAGE_DEPIC_CONDITION = `?img a ${IMAGE} . ?img ${DEPICTED_OBJ} ?depic`
@@ -95,7 +93,6 @@ export default API = {
     handleInfoData: function(data) {
         let rawJSON = JSON.parse(data)
         let result = rawJSON.sparql.results.result.binding.literal['#text']
-        let parsedResponse = []
         return JSON.parse(JSON.stringify(result))
     },
 

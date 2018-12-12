@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native'
-import {ResponsiveImage} from '../components/CategoryCard'
-const dimensions = {width: Dimensions.get('window').width, height: Dimensions.get('window').height}
+import {View, StyleSheet, Image, TouchableOpacity} from 'react-native'
 
 export default class ImgCard extends Component {
     render() {
@@ -23,7 +21,7 @@ export default class ImgCard extends Component {
         return (
             <View style = {styles.container}>
                 <TouchableOpacity onPress = {this.props.onPress}>
-                    <ResponsiveImage source = {{uri : this.props.cardImage}} style = {styles.imgView}/>
+                    <Image source = {{uri : this.props.cardImage}} style = {styles.imgView}/>
                 </TouchableOpacity>
             </View>
         )

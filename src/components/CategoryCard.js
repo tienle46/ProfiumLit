@@ -9,7 +9,7 @@ export default class CategoryCard extends Component {
                 backgroundColor: '#fffdf6',
                 overflow: 'hidden',
                 paddingTop: 10, paddingHorizontal: 10,
-                elevation: 5,
+                elevation: 3,
             },
             wrapper: {
                 flex: 1,

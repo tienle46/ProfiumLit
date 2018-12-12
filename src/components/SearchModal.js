@@ -50,16 +50,16 @@ export default class SearchModal extends Component{
                 <View style = {{width: '90%', marginTop: '8%', flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
                     <View style = {{width: '40%', padding: 0, margin: 0}}>
                         <Button
-                            onPress={this.getDateValue}
-                            title="Filter"
-                            color="#494949"
+                            onPress={this.resetPage}
+                            title="Reset"
+                            color="#db2d43"
                         />
                     </View>
                     <View style = {{width: '40%', padding: 0, margin: 0}}>
                         <Button
-                            onPress={this.resetPage}
-                            title="Reset"
-                            color="#db2d43"
+                            onPress={this.getDateValue}
+                            title="Filter"
+                            color="#494949"
                         />
                     </View>
                 </View>
