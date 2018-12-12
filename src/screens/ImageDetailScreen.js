@@ -7,9 +7,11 @@ import RouteNames from '../routes/RouteNames'
 import Header from '../components/Header'
 import ImgCard from '../components/ImgCard'
 import {ResponsiveImage} from '../components/CategoryCard'
+import moment from 'moment'
 const searchIcon = require('../assets/images/search.png')
 const dimensions = {width: Dimensions.get('window').width, height: Dimensions.get('window').height}
 const B = (props) => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>
+
 
 export default class ImageDetailScreen extends Component {
     static navigationOptions = ({navigation}) => {
@@ -36,10 +38,28 @@ export default class ImageDetailScreen extends Component {
         }
     }
 
+    handleTagData = (data) => {
+        let output = ''
+        data.forEach(element => {
+            output += `#${element.tag} `
+        });
+        return(output)
+    }
+ 
     async componentDidMount() {
-        const res = await API.getImageTime(Router.getParam(this,'imageUrl').originalUrl)
+        const dateRes = await API.getImageInfo('time',Router.getParam(this,'imageUrl').originalUrl)
+        const date = moment(dateRes).format('hh:mm:ss DD-MM-YYYY')
+        const nameRes = await API.getImageInfo('name',Router.getParam(this,'imageUrl').originalUrl)
+        const ownerRes = await API.getImageInfo('owner',Router.getParam(this,'imageUrl').originalUrl)
+        const descriptionRes = await API.getImageInfo('description',Router.getParam(this,'imageUrl').originalUrl)
+        const tagRes = await API.getImageInfo('tag',Router.getParam(this,'imageUrl').originalUrl)
+        const tag = this.handleTagData(tagRes)
         this.setState({
-            date: res
+            date: date,
+            title: nameRes,
+            owner: ownerRes,
+            description: descriptionRes,
+            tag: tag
         })
     }
 
@@ -49,10 +69,11 @@ export default class ImageDetailScreen extends Component {
                 <ResponsiveImage style = {styles.imgDetail} source = {{uri : Router.getParam(this,'imageUrl').url}}/>
 
                 <View style = {styles.propertyDetail}>
-                    <Text style = {styles.detail}><B>Title:</B> null</Text>
-                    <Text style = {styles.detail}><B>User:</B> null</Text>
-                    {/* <Text style = {styles.detail}><B>Time:</B>{this.state.date}</Text> */}
-                    <Text style = {styles.detail}><B>Description</B> null</Text>
+                    <Text style = {styles.detail}><B>Title:</B> {this.state.title}</Text>
+                    <Text style = {styles.detail}><B>Owner:</B> {this.state.owner}</Text>
+                    <Text style = {styles.detail}><B>Time:</B> {this.state.date}</Text>
+                    <Text style = {styles.detail}><B>Description:</B> {this.state.description}</Text>
+                    <Text style = {styles.detail}><B>Tag:</B> {this.state.tag}</Text>
                 </View>
             </ScrollView>
         )
