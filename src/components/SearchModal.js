@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, TextInput, Slider, Button } from 'react-native'
-
+import {View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput, Slider, Button } from 'react-native'
+const B = (props) => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>
 
 export default class SearchModal extends Component{
     constructor(props) {
@@ -24,7 +24,7 @@ export default class SearchModal extends Component{
                 </TouchableOpacity>
 
                 <View style = {{width: '80%', marginTop: '10%'}}>
-                    <Text style = {{color: '#494949'}}>Keyword</Text>
+                    <Text style = {{color: '#494949'}}><B>Keyword</B></Text>
                     <View style = {{alignItems: 'center'}}>
                         <TextInput
                             style={{width: '90%', height: 30, borderColor: 'gray', borderBottomWidth: 1, padding: 0}}
@@ -35,7 +35,7 @@ export default class SearchModal extends Component{
                 </View>
 
                 <View style = {{width: '80%', marginTop: '8%'}}>
-                    <Text style = {{color: '#494949'}}>Time</Text>
+                    <Text style = {{color: '#494949'}}><B>Year</B></Text>
                     <Slider
                         style = {{marginTop: 20}}
                         step={1}
@@ -44,10 +44,10 @@ export default class SearchModal extends Component{
                         value={this.props.year}
                         onSlidingComplete={ val => this.setState({year:val})}
                     />
-                    <Text style = {{textAlign: 'center', marginBottom: 0}}>{this.state.year}</Text>
+                    <Text style = {{textAlign: 'center', marginBottom: 0, fontSize: 16}}><B>{this.state.year}</B></Text>
                 </View>
 
-                <View style = {{width: '80%', marginTop: '8%', flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                <View style = {{width: '90%', marginTop: '8%', flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
                     <View style = {{width: '40%', padding: 0, margin: 0}}>
                         <Button
                             onPress={this.getDateValue}
