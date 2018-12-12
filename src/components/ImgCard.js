@@ -8,6 +8,10 @@ export default class ImgCard extends Component {
         const styles = StyleSheet.create({
             container: {
                 elevation: 2,
+                shadowColor: '#333333',
+                shadowOffset: { width: 2, height: 2 },
+                shadowOpacity: 0.3,
+                shadowRadius: 7,
             },
             imgView: {
                 margin: 5,

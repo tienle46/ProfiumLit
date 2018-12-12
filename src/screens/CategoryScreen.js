@@ -188,7 +188,6 @@ export default class CategoryScreen extends Component {
 }
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 5,
         flex:1,
         flexDirection: 'row',
         backgroundColor: '#ece8d9'
