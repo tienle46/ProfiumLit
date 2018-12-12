@@ -129,6 +129,7 @@ export default class CategoryScreen extends Component {
                     <SearchModal 
                         closeOnPress = {this._closeSearchModal}
                         callbackFromScreen = {this.onReceiveDataFromSearchModal}
+                        callResetFromScreen = {this.resetPage}
                     />
                 </View>
             </BlurView>
