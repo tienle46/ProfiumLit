@@ -40,7 +40,7 @@ export default class SearchModal extends Component{
                         style = {{marginTop: 20}}
                         step={1}
                         minimumValue={2000}
-                        maximumValue={2018}
+                        maximumValue={2020}
                         value={this.props.year}
                         onSlidingComplete={ val => this.setState({year:val})}
                     />
