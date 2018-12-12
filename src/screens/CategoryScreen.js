@@ -110,7 +110,7 @@ export default class CategoryScreen extends Component {
                 title = 'Title'
                 description = 'Description'
                 onPress = {() => this.onItemClicked(item.key)}
-                itemWidth = {(dimensions.width-30)/3}
+                itemWidth = {(dimensions.width-40)/3}
             />
         )
     }
@@ -173,6 +173,7 @@ export default class CategoryScreen extends Component {
                         renderItem = {this.renderItem}
                         extraData = {this.state.isLoading}
                         showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{paddingBottom:10}}
                     />
                     {this.renderSearchModal()}
                 </View>
@@ -184,11 +185,11 @@ const styles = StyleSheet.create({
     container: {
         flex:1,
         flexDirection: 'row',
-        backgroundColor: '#ece8d9',
+        backgroundColor: '#ece8d9'
     },
     list: {
         width: '100%',
-        marginVertical: 5
+        padding: 5
     },
     item: {
         marginBottom: dimensions.height * 0.02

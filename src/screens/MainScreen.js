@@ -113,6 +113,7 @@ export default class MainScreen extends Component {
                     numColumns = {FLATLIST_COLUMN_NUM}
                     extraData = {this.state.isLoading}
                     showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{paddingBottom:20}}
                 />
             </View>
         )
@@ -120,6 +121,7 @@ export default class MainScreen extends Component {
 }
 const styles = StyleSheet.create({
     container: {
+        width: dimensions.width,
         flexDirection: 'column',
         flex:1,
         alignItems: 'center',
@@ -127,11 +129,10 @@ const styles = StyleSheet.create({
     },
     list: {
         width: '100%',
-        paddingHorizontal: 20,
-        marginVertical: 10
+        padding: 20
     },
     item: {
-        marginVertical: 10
+        marginBottom: 20
     },
     search: {
         width: 30,
