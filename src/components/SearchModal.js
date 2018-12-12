@@ -59,7 +59,7 @@ export default class SearchModal extends Component{
                         <Button
                             onPress={this.resetPage}
                             title="Reset"
-                            color="#ffe867"
+                            color="#db2d43"
                         />
                     </View>
                 </View>

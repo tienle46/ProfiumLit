@@ -20,14 +20,7 @@ export default class MainScreen extends Component {
             <Header/>
             ),
             headerTintColor: '#494949',
-            headerRight: (
-            <TouchableOpacity
-                onPress={navigation.getParam('openSearch')}
-                style = {{marginRight: 20}}
-            >
-                <Image source = {searchIcon} style = {styles.search} resizeMode = 'contain'/>
-            </TouchableOpacity>
-            ),
+            
         }
     }
 
