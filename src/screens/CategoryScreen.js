@@ -80,7 +80,7 @@ export default class CategoryScreen extends Component {
         let dataList = []
         for(let i = 0; i< data.urls.length; i++) {
             let image = API.getNormalImage(data.urls[i])
-            let item ={key: `${i}`,url: image}
+            let item ={key: `${i}`,url: image, originalUrl: data.urls[i]}
             dataList.push(item)
         }
         return dataList
@@ -101,7 +101,7 @@ export default class CategoryScreen extends Component {
     }
 
     onItemClicked = (key) => {
-        // Router.navigate(RouteNames.Detail, {imageUrl: this.state.dataList[key-1]})
+        Router.navigate(RouteNames.Detail, {imageUrl: this.state.dataList[key]})
     }
 
     renderItem = ({item}) => {
@@ -188,7 +188,6 @@ export default class CategoryScreen extends Component {
 }
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 5,
         flex:1,
         flexDirection: 'row',
         backgroundColor: '#ece8d9'

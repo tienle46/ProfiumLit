@@ -1,19 +1,20 @@
-const QUERY_START = 'query='
-const REMOTE_END_POINT = 'https://m1.profium.com/servlet/QueryServlet?'
+const QUERY_PREFIX = 'query='
+const END_POINT = 'https://m1.profium.com/servlet/QueryServlet?'
 const IMAGE = '<http://www.profium.com/archive/Image>'
 const DEPICTED_OBJ = '<http://www.profium.com/archive/depictedObject>'
 const DEPICTED_OBJ_INV = '<http://www.profium.com/archive/depictedObjectInverse>'
-const DISPLAY_URL_START = 'https://m1.profium.com/displayContent.do?uri='
-const FETCH_ALL = `SELECT ?p ?label (COUNT(?s) AS ?COUNT) WHERE { {?s ?p ?o FILTER REGEX(STR(?p), "http://www.profium.com/city/") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} UNION { ?s ?p ?o FILTER REGEX(STR(?p),  "http://www.profium.com/tuomi") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} UNION { ?s ?p ?o FILTER REGEX(STR(?p), "http://www.profium.com/tuomitos") . ?p rdfs:label ?label FILTER LANGMATCHES( LANG(?label), "fi" ) . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse} }  GROUP BY ?p ?label`
+const URL_PREFIX = 'https://m1.profium.com/displayContent.do?uri='
 const IMG_TYPE_THUMB = '&type=thumb'
 const IMG_TYPE_LARGE_THUMB = '&type=largeThumb'
 const IMG_TYPE_NORMAL = '&type=normal'
-const DOC_SPECIFIER = '<http://www.profium.com/tuomi/asiakirjatyypinTarkenne>'
+const TAG = '<http://www.profium.com/tuomi/asiakirjatyypinTarkenne>'
 const MOD_DATE = '<http://www.profium.com/city/muokkausaika>'
+const NAME = '<http://www.profium.com/imagearchive/2007/name>'
 const DATE_FORMAT = '<http://www.w3.org/2001/XMLSchema#dateTime>'
-const ORDER_BY_DATE_DESC = 'ORDER BY DESC(?date)'
-const IMAGE_DEPIC_COND = `?img a ${IMAGE} . ?img ${DEPICTED_OBJ} ?depic`
-const GET_ALL_TAGS = `SELECT DISTINCT ?prop WHERE { ${IMAGE_DEPIC_COND} . ?depic ${DOC_SPECIFIER} ?prop }`
+const OWNER = '<http://www.profium.com/tuomi/asiakirjanVastuuhenkilo>'
+const DESCRIPTION = '<http://www.profium.com/tuomi/asiakirjanKuvaus>'
+const IMAGE_DEPIC_CONDITION = `?img a ${IMAGE} . ?img ${DEPICTED_OBJ} ?depic`
+const GET_ALL_TAGS = `SELECT DISTINCT ?prop WHERE { ${IMAGE_DEPIC_CONDITION} . ?depic ${TAG} ?prop }`
 var DomParser = require('react-native-html-parser').DOMParser
 const parser = new DomParser()
 
@@ -21,13 +22,13 @@ export default API = {
 
     query: async function(config) {
 
-        const request = REMOTE_END_POINT
+        const request = END_POINT
         const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `${QUERY_START}${config.query}`
+        body: `${QUERY_PREFIX}${config.query}`
         }
         const res = await fetch(request, options)
         const resText = await res.text()
@@ -35,89 +36,9 @@ export default API = {
         return json
     },
 
-
-    fetchAll : async function()  {
-        const config = {
-        query: FETCH_ALL
-        }
-        const res = await this.query(config)
-        const output = this.handleFetchAllData(res)
-        return output
-    },
-
-    handleFetchAllData: function(json) {
-        let rawJSON = JSON.parse(json)
-        let resultArray = []
-        resultArray = rawJSON.sparql.results.result
-        let parsedResponse = []
-        resultArray.forEach(element => {
-            let tmp = {
-                predicate: element.binding[0].uri,
-                label: element.binding[1].literal['#text'],
-                count: element.binding[2].literal['#text']
-            }
-            parsedResponse.push(tmp)
-        })
-        return JSON.parse(JSON.stringify(parsedResponse))
-    },
-
-    getPredicatedObjects: async function(predicate){
-        const GET_PREDICATED_OBJ = 'SELECT ?o (COUNT(?s) AS ?COUNT) WHERE { ?s <' + predicate + '> ?o FILTER regex(STR(?s), "http://www.profium.com/archive/")} GROUP BY ?o'
-        const config = {
-        query: GET_PREDICATED_OBJ
-        }
-        const res = await this.query(config)
-        const output = this.handlePredicatedObjectData(res)
-        return(output)
-    },
-
-    handlePredicatedObjectData: function(json) {
-        let rawJSON = JSON.parse(json)
-        let resultArray = rawJSON.sparql.results.result
-        let parsedResponse = []
-        if (resultArray instanceof Array) {
-            resultArray.forEach(element => {
-                let tmp = {
-                    date: element.binding[0].literal? element.binding[0].literal['#text'] : element.binding[0].uri.split('#')[1],
-                    count: element.binding[1].literal['#text']
-                }
-                parsedResponse.push(tmp)
-            })
-        } else {
-            let tmp = {
-                date: resultArray.binding[0].literal? resultArray.binding[0].literal['#text'] : resultArray.binding[0].uri.split('#')[1],
-                count: resultArray.binding[1].literal['#text']
-            }
-            parsedResponse.push(tmp)
-        }
-        return JSON.parse(JSON.stringify(parsedResponse))
-    },
-
-    getInversePredicatedObjects: async function(predicate) {
-        const GET_INVERESE_PREDICATED_OBJ = 'SELECT DISTINCT ?objectInverse WHERE { ?s <' + predicate + '> ?o . ?s <http://www.profium.com/archive/depictedObjectInverse> ?objectInverse FILTER REGEX(STR(?s), "http://www.profium.com/archive/") }'
-        const config = {
-        query: GET_INVERESE_PREDICATED_OBJ
-        }
-        const res = await this.query(config)
-        const output = this.handleInversePredicatedObjectData(res)
-        return output
-    },
-
-    handleInversePredicatedObjectData(data) {
-        let rawJSON = JSON.parse(data)
-        let resultArray = rawJSON.sparql.results.result
-        let parsedResponse = []
-        resultArray.forEach(element => {
-            let tmp = {
-                objectInverse: element.binding.uri
-            }
-            parsedResponse.push(tmp)
-        })
-        return JSON.parse(JSON.stringify(parsedResponse))
-    },
     getAllTags: async function() {
         const config = {
-            query: GET_ALL_TAGS, // fetch the top level category names
+            query: GET_ALL_TAGS, 
         }
         const res = await this.query(config)
         const output = this.handleTagsData(res)
@@ -136,7 +57,7 @@ export default API = {
         return JSON.parse(JSON.stringify(parsedResponse))
     },
     getUrlsByTag: async function(tag) {
-        const GET_URLS_BY_TAG = `SELECT DISTINCT ?url WHERE { ${IMAGE_DEPIC_COND} . ?depic ${DOC_SPECIFIER} '${tag}' . ?depic ${DEPICTED_OBJ_INV} ?url }`
+        const GET_URLS_BY_TAG = `SELECT DISTINCT ?url WHERE { ${IMAGE_DEPIC_CONDITION} . ?depic ${TAG} '${tag}' . ?depic ${DEPICTED_OBJ_INV} ?url }`
         const config = {
             query: GET_URLS_BY_TAG,
         }
@@ -162,7 +83,7 @@ export default API = {
     getUrlsByYearAndTag : async function(year, tag) {
         let startDate = `${year}-01-01T00:00:00`
         let endDate = `${year}-12-31T23:59:59`
-        const GET_URLS_BY_YEAR = `SELECT DISTINCT ?url WHERE { ?depic ${MOD_DATE} ?date . FILTER ( ?date >= '${startDate}'^^xsd:dateTime %26%26 ?date <= '${endDate}'^^xsd:dateTime )  ?depic ${DEPICTED_OBJ_INV} ?url . ?depic ${DOC_SPECIFIER} '${tag}' }`
+        const GET_URLS_BY_YEAR = `SELECT DISTINCT ?url WHERE { ?depic ${MOD_DATE} ?date . FILTER ( ?date >= '${startDate}'^^xsd:dateTime %26%26 ?date <= '${endDate}'^^xsd:dateTime )  ?depic ${DEPICTED_OBJ_INV} ?url . ?depic ${TAG} '${tag}' }`
         const config = {
             query : GET_URLS_BY_YEAR
         }
@@ -170,6 +91,46 @@ export default API = {
         const output = this.handleUrlsData(res)
         return output
     },
+
+    handleInfoData: function(data) {
+        let rawJSON = JSON.parse(data)
+        let result = rawJSON.sparql.results.result.binding.literal['#text']
+        let parsedResponse = []
+        return JSON.parse(JSON.stringify(result))
+    },
+
+    getImageInfo: async function(property,url) {
+        let query = ''
+        switch(property) {
+            case 'time':
+                query = `SELECT DISTINCT ?time WHERE { ?depic ${DEPICTED_OBJ_INV} '${url}' . ?depic ${MOD_DATE} ?time }`
+                break
+            case 'name':
+                query = `SELECT DISTINCT ?name WHERE {?depic ${DEPICTED_OBJ_INV} '${url}' . ?depic ${NAME} ?name}`
+                break
+            case 'owner':
+                query = `SELECT DISTINCT ?owner WHERE { ?depic ${DEPICTED_OBJ_INV} '${url}' . ?depic ${OWNER} ?owner }`
+                break
+            case 'description':
+                query = `SELECT DISTINCT ?des WHERE { ?depic ${DEPICTED_OBJ_INV} '${url}' . ?depic ${DESCRIPTION} ?des }`
+                break
+            case 'tag':
+                query = `SELECT DISTINCT ?tag WHERE { ?depic ${DEPICTED_OBJ_INV} '${url}' . ?depic ${TAG} ?tag }`
+                break
+        }
+        const config = {
+            query: query,
+        }
+        const res = await this.query(config)
+        let output = null
+        if(property === 'tag') {
+            output = this.handleTagsData(res)
+        } else {
+            output = this.handleInfoData(res)
+        }
+        return output
+    },
+
     xml2json: function(xml, tab) {
         xml = parser.parseFromString(xml, "text/xml")
         var X = {
@@ -322,12 +283,12 @@ export default API = {
 
     getLargeThumbnailImage: function(imageUrl) {
     
-        return `${DISPLAY_URL_START}${imageUrl}${IMG_TYPE_LARGE_THUMB}`
+        return `${URL_PREFIX}${imageUrl}${IMG_TYPE_LARGE_THUMB}`
     },
 
     getNormalImage: function(imageUrl) {
 
-        return `${DISPLAY_URL_START}${imageUrl}${IMG_TYPE_NORMAL}`
+        return `${URL_PREFIX}${imageUrl}${IMG_TYPE_NORMAL}`
     },
   
 

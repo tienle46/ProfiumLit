@@ -58,7 +58,7 @@ export default class CategoryCard extends Component {
                     </TouchableOpacity>
 
                     <View style = {styles.detail}>
-                        {this.props.showDescription ? <Text style={styles.text}>{this.props.categoryName}</Text> : null}
+                        {this.props.showDescription ? <Text style={styles.text}>#{this.props.categoryName}</Text> : null}
                         <View style = {styles.number}>
                             <Text style = {{fontSize: 14, color: '#494949'}}>{this.props.photoCount} photos</Text>
                         </View>
