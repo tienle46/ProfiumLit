@@ -170,6 +170,23 @@ export default API = {
         const output = this.handleUrlsData(res)
         return output
     },
+    getImageTime: async function(url) {
+        const query = `SELECT DISTINCT ?time WHERE { ?depic ${DEPICTED_OBJ_INV} '${url}' . ?depic ${MOD_DATE} ?time }`
+        const config = {
+        query: query,
+        }
+        const res = await this.query(config)
+        const output = this.handleDateData(res)
+        return output
+    },
+
+    handleDateData: function(data) {
+        let rawJSON = JSON.parse(data)
+        let result = rawJSON.sparql.results.result.binding.literal['#text']
+        let parsedResponse = []
+        return JSON.parse(JSON.stringify(result))
+    },
+
     xml2json: function(xml, tab) {
         xml = parser.parseFromString(xml, "text/xml")
         var X = {

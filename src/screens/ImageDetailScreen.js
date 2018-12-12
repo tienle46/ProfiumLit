@@ -29,6 +29,19 @@ export default class ImageDetailScreen extends Component {
             ),
         }
     }
+    constructor() {
+        super()
+        this.state = {
+            date: ''
+        }
+    }
+
+    async componentDidMount() {
+        const res = await API.getImageTime(Router.getParam(this,'imageUrl').originalUrl)
+        this.setState({
+            date: res
+        })
+    }
 
     render() {
         return(
@@ -38,7 +51,7 @@ export default class ImageDetailScreen extends Component {
                 <View style = {styles.propertyDetail}>
                     <Text style = {styles.detail}><B>Title:</B> null</Text>
                     <Text style = {styles.detail}><B>User:</B> null</Text>
-                    <Text style = {styles.detail}><B>Time:</B> null</Text>
+                    {/* <Text style = {styles.detail}><B>Time:</B>{this.state.date}</Text> */}
                     <Text style = {styles.detail}><B>Description</B> null</Text>
                 </View>
             </ScrollView>
