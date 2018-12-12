@@ -12,6 +12,10 @@ export default class SearchModal extends Component{
         this.props.callbackFromScreen(this.state.year)
     }   
 
+    resetPage = () => {
+        this.props.callResetFromScreen()
+    }
+
     render(){
         return(
             <View style = {styles.searchBox}>
@@ -42,25 +46,22 @@ export default class SearchModal extends Component{
                     />
                     <Text style = {{textAlign: 'center', marginBottom: 0}}>{this.state.year}</Text>
                 </View>
-                
-                {/* <View style = {{width: '80%', marginTop: '5%'}}>
-                    <Text>Location</Text>
-                    <Picker 
-                            // mode = {"dialog"} 
-                            selectedValue = {this.props.selected} 
-                            onValueChange = {(value) => this.setState({selected:value})}>
-                        <Item value = {'Helsinki'} label = {'Helsinki'} />
-                        <Item value = {'Espoo'} label = {'Espoo'} />
-                        <Item value = {'Vantaa'} label = {'Vantaa'} />
-                    </Picker>
-                </View> */}
 
-                <View style = {{width: '40%', marginTop: '8%'}}>
-                    <Button
-                        onPress={this.getDateValue}
-                        title="Filter"
-                        color="#494949"
-                    />
+                <View style = {{width: '80%', marginTop: '8%', flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                    <View style = {{width: '40%', padding: 0, margin: 0}}>
+                        <Button
+                            onPress={this.getDateValue}
+                            title="Filter"
+                            color="#494949"
+                        />
+                    </View>
+                    <View style = {{width: '40%', padding: 0, margin: 0}}>
+                        <Button
+                            onPress={this.resetPage}
+                            title="Reset"
+                            color="#ffe867"
+                        />
+                    </View>
                 </View>
             </View>
         )

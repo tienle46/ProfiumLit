@@ -86,15 +86,18 @@ export default class CategoryScreen extends Component {
         return dataList
     } 
 
-    componentDidMount() {
-        this.props.navigation.setParams({ openSearch: this._onPressAdd });
+    loadAllData = () => {
         const data = Router.getParam(this,'data')
         const dataList = this._createDataList(data)
-
         this.setState({
             dataList : dataList,
             isLoading : false
         })
+    }
+
+    componentDidMount() {
+        this.props.navigation.setParams({ openSearch: this._onPressAdd });
+        this.loadAllData()
     }
 
     onItemClicked = (key) => {
@@ -119,6 +122,10 @@ export default class CategoryScreen extends Component {
         )
     }
 
+    resetPage = () => {
+        this.loadAllData()
+    }
+
     renderSearchModal = () => {
         if(this.state.showSearchModal && Platform.OS === 'ios') {
             return <BlurView 
@@ -139,6 +146,7 @@ export default class CategoryScreen extends Component {
                 <SearchModal 
                     closeOnPress = {this._closeSearchModal}
                     callbackFromScreen = {this.onReceiveDataFromSearchModal}
+                    callResetFromScreen = {this.resetPage}
                 />
             </View>
         </View> 
