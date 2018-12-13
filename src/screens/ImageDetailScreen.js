@@ -78,10 +78,11 @@ export default class ImageDetailScreen extends Component {
 }
 const styles = StyleSheet.create({
     container: {
+        flexGrow: 1,
         width: dimensions.width,
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#ece8d9',
+        backgroundColor: '#ece8d9'
     },
     imgDetail: {
         width: '100%',
